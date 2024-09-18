@@ -18,7 +18,19 @@ exports.getAllUsers = async(req, res) => {
 
 exports.createUser = async (req, res) => {
     try{
-        const {name,username, email, password} = req.body;
+        const {name,username, email, password} = req.body; 
+        //check wheather the user already exists or not
+        const User = await user.findOne({email: email});
+        if(User){
+            return res.status(400).json(
+                {
+                    success: false,
+                    message: 'User already exists',
+                    data : User   
+                } 
+            );
+        }
+
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(password, salt);
         const newUser = await user.create({name,email,username, password:hashPassword});
@@ -36,7 +48,7 @@ exports.createUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     try {
-        console.log(req.body)
+        console.log(req.body);
         const { email, password } = req.body;
         const User = await user.findOne({ email: email });
         console.log(User)

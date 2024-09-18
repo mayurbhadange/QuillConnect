@@ -10,4 +10,4 @@ router.get('/getAllPost/:id', getAllPost); //self all post including his friends
 router.put('/likeUnlikePost/:id', likeUnlikePost);
 router.delete('/deletePost/:id', deletePost);
 
-module.exports = router;
+module.exports = router; 

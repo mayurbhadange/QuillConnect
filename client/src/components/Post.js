@@ -60,16 +60,20 @@ const SocialMediaPost = ( {post} ) => {
 
       {/* Post Image */}
 
-      {post?.image && (
+      {post?.media && (
       <Box display={"flex"}
       flexDirection={"column"}
       alignItems={"center"} >
         
         <Image
-          src={`${post?.image}`} // Replace with the uploaded image path
+          src={`${post?.media}`} // Replace with the uploaded image path
           borderRadius="md"
           mb="4"
         />
+
+        {/* <video src={`${post?.media}`} // Replace with the uploaded image path
+          borderRadius="md"
+          mb="4"></video> */}
       </Box>)}
 
       {/* Post Caption */}

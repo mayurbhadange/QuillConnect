@@ -4,9 +4,21 @@ import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { FaUser } from "react-icons/fa";
 import { FaRegComment, FaEnvelope } from 'react-icons/fa';
 import { Link } from '@chakra-ui/react';
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { user } = useContext(UserContext);
+  console.log('navbar data : ',user);
+
+
+  const logoutHandler = () => {
+    localStorage.removeItem("user");
+    window.location.href = "/login";
+  }
+  
 
   return (
     <Box bg="blue.500" px={4} position={"sticky"} top="0" zIndex={"999"}>
@@ -47,12 +59,18 @@ export default function Navbar() {
         </HStack>
         
         <Flex alignItems="center" width={10}>
-          <Avatar
-          size="sm" // small size
-          name="John Doe" // fallback initials will be "JD"
-          src="https://bit.ly/ryan-florence" // image source
-          />
+          {user && <Link href={`/profile/${user._id}`}>
+            <Avatar
+            size="sm" // small size
+            name={user.name} // fallback initials will be "JD"
+            src={user.profilePicture ? user.profilePicture : "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/694px-Unknown_person.jpg" } // image source
+            />
+          </Link>}
         </Flex>
+
+        <Button onClick={logoutHandler}> Logout</Button>
+
+
       </Flex>
 
       {isOpen ? (

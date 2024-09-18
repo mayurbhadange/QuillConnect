@@ -34,6 +34,10 @@ const RegisterPage = () => {
         duration: 7000,
         isClosable: true,
       });
+
+      // Redirect to login page after successful registration
+      window.location.href = '/login';
+
     } catch (error) {
       // Show error toast if the request fails
       toast({
@@ -76,7 +80,7 @@ const RegisterPage = () => {
           <Text fontSize={'2xl'} color="teal.400">
             Fill the below details:
           </Text>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} >
             <Stack spacing={4}>
               {/* Username */}
               <FormControl id="UserName">
@@ -132,6 +136,13 @@ const RegisterPage = () => {
               {/* Create Account Button */}
               <Button type="submit" colorScheme="green" size="md" width="full">
                 Create a New Account
+              </Button>
+
+              <Text textAlign={'center'} color={'blue.200'}>Already have account</Text>
+
+              {/* Log In Button */}
+              <Button type="submit" colorScheme="blue" size="md" width="full" onClick={() => window.location.href='/login'}>
+                Log In
               </Button>
             </Stack>
           </form>

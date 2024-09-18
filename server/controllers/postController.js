@@ -27,13 +27,20 @@ exports.createPost = async (req, res) => {
 exports.getAllPost = async (req, res) => {
     const currentUser = await user.findById(req.params.id);
     try{
-        const userPosts = await Post.find({userId: req.body.userId});
+        const userPosts = await Post.find({userId: req.params.id});
+        
         const friendPosts = await Promise.all(
             currentUser.followings.map((friendId) => {
                 return Post.find({ userId: friendId });
             })
         )
-        res.json(userPosts.concat(...friendPosts));
+        res.status(200).json({
+            success : true,
+            message : "All posts fetched successfully",
+            data : userPosts.concat(...friendPosts).sort((p1,p2)=>{
+                return new Date(p2.createdAt) - new Date(p1.createdAt);
+            })
+        })
     }catch(err){
         res.status(500).json(err);
     }

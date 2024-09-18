@@ -5,7 +5,7 @@ const postSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : 'user'
     },
-    image:{
+    media:{
         type: String,
         default : ""
     },

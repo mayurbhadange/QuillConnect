@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Box, Button, Input, Stack, Text, FormControl, Link, useToast } from '@chakra-ui/react';
 import axios from 'axios';
+import { UserContext } from '../context/UserContext'; // Import the context
 
 const LoginPage = () => {
   const toast = useToast();
-
-  // State to store the user's email and password
+  const { user, setUser } = useContext(UserContext); // Use context for user
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Submit handler to handle form submission
   const submitHandler = async (e) => {
-    e.preventDefault(); // Prevents default form submission
+    e.preventDefault();
 
-    // Log the email and password to verify the inputs
     console.log("User Info: ", { email, password });
 
     try {
-      // Send login request to the backend
       const response = await axios.post('http://localhost:3000/api/auth/login', { email, password }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       });
 
-      console.log('Response Data:', response.data);
+      // Save the user data to local storage
+    localStorage.setItem('user', JSON.stringify(response.data.data));
+      console.log('Response Data mmmmmmmmmm:', response.data);
 
       // Show success toast if login is successful
       toast({
@@ -34,6 +31,13 @@ const LoginPage = () => {
         duration: 7000,
         isClosable: true,
       });
+
+      // Set the user in the context
+      setUser(response.data.data); // Use response data from the backend
+
+      // Redirect to the homepage after successful login
+      window.location.href = '/';
+      
 
     } catch (error) {
       console.log("Error Response: ", error.response);
@@ -50,76 +54,47 @@ const LoginPage = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="100vh"
-      bg="gray.900" // Background color for contrast
-    >
+    <Box display="flex" alignItems="center" justifyContent="center" height="100vh" bg="gray.900">
       <Stack direction="row" spacing={10} align="center">
-        {/* Left Section with Branding */}
         <Box>
-          <Text fontSize="5xl" fontWeight="bold" color="teal.400">
-            ShareFun
-          </Text>
-          <Text fontSize="2xl" mt="4" color="gray.300">
-            Connect with friends and the world around you on ShareFun.
-          </Text>
+          <Text fontSize="5xl" fontWeight="bold" color="teal.400">ShareFun</Text>
+          <Text fontSize="2xl" mt="4" color="gray.300">Connect with friends and the world around you on ShareFun.</Text>
         </Box>
 
-        {/* Right Section with Login Form */}
-        <Box
-          p={8}
-          pt={5}
-          rounded="md"
-          shadow="2xl"
-          width="350px"
-          bg="gray.800" // Background for login box
-          textAlign="center"
-        >
+        <Box p={8} pt={5} rounded="md" shadow="2xl" width="350px" bg="gray.800" textAlign="center">
           <Text fontSize="3xl" fontWeight="bold" color="teal.400">Log In</Text>
           <Text fontSize="xl" color="teal.400">To continue being social</Text>
 
           <form onSubmit={submitHandler}>
             <Stack spacing={4}>
-              {/* Email Input */}
               <FormControl id="email">
                 <Input
                   type="email"
                   placeholder="Email"
-                  value={email} // Controlled by useState
-                  onChange={(e) => setEmail(e.target.value)} // Update state on input change
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   bg="gray.700"
                   color="gray.300"
                 />
               </FormControl>
 
-              {/* Password Input */}
               <FormControl id="password">
                 <Input
                   type="password"
                   placeholder="Password"
-                  value={password} // Controlled by useState
-                  onChange={(e) => setPassword(e.target.value)} // Update state on input change
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   bg="gray.700"
                   color="gray.300"
                 />
               </FormControl>
 
-              {/* Log In Button */}
-              <Button type="submit" colorScheme="blue" size="md" width="full">
-                Log In
-              </Button>
+              <Button type="submit" colorScheme="blue" size="md" width="full">Log In</Button>
 
-              {/* Forgot Password Link */}
-              <Link color="blue.400" textAlign="center" fontSize="sm">
-                Forgot Password?
-              </Link>
+              <Link color="blue.400" textAlign="center" fontSize="sm">Forgot Password?</Link>
 
-              {/* Create Account Button */}
               <Button colorScheme="green" size="md" width="full" onClick={() => window.location.href='/register'}>
                 Create a New Account
               </Button>
