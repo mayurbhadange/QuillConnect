@@ -5,6 +5,7 @@ import axios from 'axios';
 import { format } from 'timeago.js';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
+import CommentSection from '../components/comment';  // Import the new CommentSection component
 
 // Keyframes for the like animation
 const bounce = keyframes`
@@ -33,7 +34,13 @@ const SocialMediaPost = ({ post }) => {
   const [user, setUser] = useState({});
   const [liked, setLiked] = useState(post.likes.includes(selfUser._id) ? true : false); // Track like status
   const [likeCount, setLikeCount] = useState(post.likes.length); // Initial like count
+  const [showComments, setShowComments] = useState(false);
 
+
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
+  
   // Function to handle like button click
   const handleLikeClick = async () => {
     try{
@@ -56,6 +63,7 @@ const SocialMediaPost = ({ post }) => {
       setUser(res.data.data);
     };
     fetchUsers();
+    console.log('post: ', post);
   }, [post.userId]);
 
   return (
@@ -68,7 +76,7 @@ const SocialMediaPost = ({ post }) => {
       p="4"
     >
       {/* User Info */}
-      <Flex align="center" mb="3">
+      <Flex align="center" mb="2">
         <Link to={selfUser._id === user._id ? `/profile` : `/profile/${user._id}`}>
           <Avatar
             src={user.profilePicture || "https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg"} // Default profile image
@@ -123,31 +131,32 @@ const SocialMediaPost = ({ post }) => {
         {post?.caption}
       </Text>
 
-      {/* Like and Comment Section */}
-
-        <Flex justify="space-between" align="center">
+       {/* Updated Like and Comment Section */}
+       <Flex justify="space-between" align="center">
         <Flex align="center">
-          {/* Animated like button */}
           <Icon
-            as={liked ? AiFillHeart : AiOutlineHeart} // Toggle between filled and outlined heart
+            as={liked ? AiFillHeart : AiOutlineHeart}
             boxSize={6}
             color={liked ? 'red.500' : 'red.400'}
             cursor="pointer"
             onClick={handleLikeClick}
-            animation={`${liked ? bounce : ''} 0.3s`} // Apply animation when liked
+            animation={`${liked ? bounce : ''} 0.3s`}
           />
           <Text ml="1" fontSize="sm">
             {likeCount} people like it
           </Text>
         </Flex>
 
-        <Flex align="center">
+        <Flex align="center" cursor="pointer" onClick={toggleComments}>
           <Icon as={AiOutlineMessage} boxSize={5} />
           <Text ml="1" fontSize="sm">
-            12 comments
+            {post.comments?.length || 0} comments
           </Text>
         </Flex>
       </Flex>
+
+      {/* Comment Section */}
+      {showComments && <CommentSection postId={post._id} />}
     </Box>
   );
 };

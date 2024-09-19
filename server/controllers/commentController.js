@@ -2,10 +2,13 @@ const Comment = require('../models/commentsSchema');
 const Post = require('../models/postSchema')
 exports.createComment = async (req, res) => {
     try{
-
-        const {comment, postId,userId} = req.body;
-        const newComment = await Comment.create({comment, postId, userId});
-        const updateUser = await Post.updateOne({$push : {comments : newComment._id}})
+        const postId = req.params.id;
+        const {comment,userId, username} = req.body;
+        const newComment = await Comment.create({comment, username, postId, userId});
+        
+        // Push the comment ID to the corresponding post's comments array
+        const updateUser = await Post.findByIdAndUpdate(postId, { $push: { comments: newComment._id } });
+        console.log(newComment)
         res.status(200).json(
             {
                 success: true,
@@ -49,11 +52,13 @@ exports.likeUnlikeComment = async (req, res) => {
 exports.getAllComment = async (req, res) => {
     try{
         const {id} = req.params;
-        const allComments = await Comment.find({postId : id});
+        const allComments = await Comment.find({postId : id})
         res.status(200).json({
             success : true,
             msg : "All comments are fetched",
-            data : allComments
+            data : allComments.sort((p1,p2)=>{
+                return new Date(p2.createdAt) - new Date(p1.createdAt);
+            })
         })
     }catch(err){
         res.status(500).json(err);

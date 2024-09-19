@@ -24,7 +24,7 @@ const Feed = ({ userId }) => {
   console.log('posts.length', posts);
 
   return (
-    <Box width={800} display="flex" alignItems="center" flexDirection="column" gap={4}>
+    <Box width={800} display="flex" alignItems="center" flexDirection="column" gap={2}>
       <Share />
 
       {posts === undefined || posts.length === 0 ? (

@@ -13,6 +13,11 @@ const commentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    username : {
+        type: String,
+        default : "",
+        required : true
+    },
     reply :[ {
         type: mongoose.Schema.Types.ObjectId,
         ref : 'Comment'

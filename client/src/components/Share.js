@@ -1,5 +1,5 @@
 import React, { useRef, useState, useContext } from 'react';
-import { Box, Flex, Input, Avatar, Button, Text, Icon } from '@chakra-ui/react';
+import { Box, Flex, Input, Avatar, Button, Text, Icon , Image, Spinner} from '@chakra-ui/react';
 import { FaCamera, FaTag, FaMapMarkerAlt, FaSmile } from 'react-icons/fa';
 import { UserContext } from '../context/UserContext';
 import axios from 'axios';
@@ -12,7 +12,7 @@ const Share = () => {
   const { user } = useContext(UserContext);
   const [fileData, setFileData] = useState({ caption: '', file: null }); // Initialize fileData as an object
   const fileInputRef = useRef(null); // Create a ref for the file input
-
+  const [loading, setLoading] = useState(false); // Loading state for the share button
   // Handle file change
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -31,13 +31,14 @@ const Share = () => {
   const shareHandler = async () => {
     try {
       // Check if a file has been selected
+      setLoading(true);
       var downloadURL = "";
       if (fileData.file) {
               // Create a storage reference
           //check type of file : img or video
-          var storagePath = "";
-
-          fileData.file.type.includes('image') ? storagePath = "media/images/"  : storagePath = "media/videos/";
+          const storagePath = fileData.file.type.includes('image') 
+                              ? "media/images/" 
+                              : "media/videos/";
 
           const storageRef = ref(storage, `${storagePath}${fileData.file.name}`);
       
@@ -54,7 +55,8 @@ const Share = () => {
           
           console.log('File uploaded to:', downloadURL);
       }
-  
+      
+      setLoading(false);
 
   
       // Now send the post request to your backend
@@ -93,6 +95,13 @@ const Share = () => {
           }
         />
       </Flex>
+      {fileData.file && <Image src={URL.createObjectURL(fileData.file)} mb={3} alt="Selected Media" 
+              borderRadius="md"
+              objectFit="cover" // Crop to fit
+              width="100%" // Responsive width
+              maxH="400px" // Set max height
+              height="auto" // Maintain aspect ratio
+              />}
       <Flex justifyContent="space-between" alignItems="center">
         <Flex>
           {/* Photo or Video Button */}
@@ -118,7 +127,7 @@ const Share = () => {
           </Button>
         </Flex>
         <Button colorScheme="green" size="sm" ml={2} onClick={shareHandler}>
-          Share
+          {loading ? <Spinner size="sm" /> : <Text size={'sm'} fontFamily={'monospace'}>Share</Text>}
         </Button>
       </Flex>
     </Box>
