@@ -31,34 +31,35 @@ const Share = () => {
   const shareHandler = async () => {
     try {
       // Check if a file has been selected
-      if (!fileData.file) {
-        throw new Error('No file selected');
+      var downloadURL = "";
+      if (fileData.file) {
+              // Create a storage reference
+          //check type of file : img or video
+          var storagePath = "";
+
+          fileData.file.type.includes('image') ? storagePath = "media/images/"  : storagePath = "media/videos/";
+
+          const storageRef = ref(storage, `${storagePath}${fileData.file.name}`);
+      
+          // Upload file to storage
+          const snapshot = await uploadBytes(storageRef, fileData.file);
+          
+          // Check if the snapshot is valid
+          if (!snapshot) {
+            throw new Error('File upload failed');
+          }
+      
+          // Get download URL
+          downloadURL = await getDownloadURL(storageRef);
+          
+          console.log('File uploaded to:', downloadURL);
       }
   
-      // Create a storage reference
-      //check type of file : img or video
-      var storagePath = "";
 
-      fileData.file.type.includes('image') ? storagePath = "media/images/"  : storagePath = "media/videos/";
-
-      const storageRef = ref(storage, `${storagePath}${fileData.file.name}`);
-  
-      // Upload file to storage
-      const snapshot = await uploadBytes(storageRef, fileData.file);
-      
-      // Check if the snapshot is valid
-      if (!snapshot) {
-        throw new Error('File upload failed');
-      }
-  
-      // Get download URL
-      const downloadURL = await getDownloadURL(storageRef);
-      
-      console.log('File uploaded to:', downloadURL);
   
       // Now send the post request to your backend
       const newPost = await axios.post('http://localhost:3000/api/posts', {
-        media: downloadURL,  // Ensure this is the download URL, not the raw file
+        media: downloadURL ,  // Ensure this is the download URL, not the raw file
         caption: fileData.caption,
         userId: user._id,
       });

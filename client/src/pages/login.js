@@ -1,11 +1,11 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Box, Button, Input, Stack, Text, FormControl, Link, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext'; // Import the context
 
 const LoginPage = () => {
   const toast = useToast();
-  const { user, setUser } = useContext(UserContext); // Use context for user
+  const { setUser } = useContext(UserContext); // Use context for user
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -21,7 +21,6 @@ const LoginPage = () => {
 
       // Save the user data to local storage
     localStorage.setItem('user', JSON.stringify(response.data.data));
-      console.log('Response Data mmmmmmmmmm:', response.data);
 
       // Show success toast if login is successful
       toast({

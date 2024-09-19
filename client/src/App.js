@@ -1,9 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import Home from './pages/home';
 import Profile from './pages/profile';
 import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
 import NoPage from './pages/NoPage';
+import EditDetails from './pages/editDetails';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { UserContext } from './context/UserContext'; // Assuming you're using UserContext for user data
 
@@ -28,6 +29,8 @@ function App() {
         {/* Login and Register */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+
+        <Route path='/editDetails' element={<EditDetails/>} />
         
         {/* No match route */}
         <Route path="*" element={<NoPage />} />

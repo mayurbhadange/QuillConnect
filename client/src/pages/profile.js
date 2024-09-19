@@ -1,16 +1,47 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { Box, Flex, Image, Avatar, Text } from '@chakra-ui/react';
 import SideBar from '../components/SideBar';
 import Feed from '../components/Feed';
 import RightBar from '../components/RightBar';
-// import { useParams } from 'react-router-dom';
-import { useContext } from 'react';
+import { useParams } from 'react-router-dom'; // Uncommented
 import { UserContext } from '../context/UserContext';
+import axios from 'axios';
 
 const Profile = () => {
-  const { user } = useContext(UserContext);
-  console.log('profile data : ',user.name);
+  const { id } = useParams(); // Extract id from URL
+  const { user: defaultUser } = useContext(UserContext); // Default user from context
+  const [user, setUser] = useState(defaultUser); // State to hold user data
+  const [loading, setLoading] = useState(false); // State to handle loading status
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (id) {
+        setLoading(true);
+        try {
+          const response = await axios.get(`http://localhost:3000/api/user/getUser/${id}`);
+          setUser(response.data.data); // Set user data from API response
+          console.log('============>',response)
+        } catch (err) {
+          console.log("Error fetching user data:", err);
+          window.location.href = '/nopage'; // Redirect if error occurs
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchUser(); // Call the function to fetch user data if `id` exists
+  }, [id]);
+
+  if (loading) {
+    return <Text>Loading...</Text>; // Render loading state while data is being fetched
+  }
+
+  if (!user) {
+    return <Text>User not found</Text>; // Handle case if user data is not available
+  }
+
   return (
     <Box>
       <Navbar />
@@ -20,7 +51,7 @@ const Profile = () => {
           {/* Banner Image */}
           <Box position="relative" height={400}>
             <Image
-              src= { 'https://www.shutterstock.com/image-photo/panoramic-view-grand-teton-range-260nw-440789620.jpg'}
+              src={user.coverPicture}
               width={'100%'}
               objectFit="cover"
               height={305}
@@ -37,11 +68,11 @@ const Profile = () => {
               <Avatar
                 size="2xl"
                 name={user.name}
-                src={ `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                border="4px solid white`}
+                src={user.profilePicture}
               />
+              
               <Text fontSize="2xl" fontWeight="bold">
-              {user.name}
+                {user.name}
               </Text>
               <Text fontSize="md">{user.bio}</Text>
             </Flex>
@@ -49,8 +80,8 @@ const Profile = () => {
 
           {/* Main Content (Feed + RightBar) */}
           <Flex mt={6} px={6}>
-            <Feed userId={user._id}/>
-            <RightBar user = {user}/>
+            <Feed userId={user._id} />
+            <RightBar user={user} />
           </Flex>
         </Box>
       </Flex>

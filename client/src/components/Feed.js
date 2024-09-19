@@ -19,7 +19,7 @@ const Feed = ({ userId }) => {
       setPosts(res.data.data);
     };
     fetchPosts();
-  }, [userId]);
+  }, []);
 
   console.log('posts.length', posts);
 

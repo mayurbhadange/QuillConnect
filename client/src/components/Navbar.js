@@ -59,7 +59,7 @@ export default function Navbar() {
         </HStack>
         
         <Flex alignItems="center" width={10}>
-          {user && <Link href={`/profile/${user._id}`}>
+          {user && <Link href={`/profile`}>
             <Avatar
             size="sm" // small size
             name={user.name} // fallback initials will be "JD"

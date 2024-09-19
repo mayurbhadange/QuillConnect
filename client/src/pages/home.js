@@ -8,14 +8,14 @@ import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 
 const Home = () => {
-  const user = useContext(UserContext).user;
+  const {user} = useContext(UserContext);
   if(!user) {
     window.location.href = "/login";
   }
   return (
     <Box>
-        <Navbar/>
-      <Flex  >
+      <Navbar/>
+        <Flex  >
         <SideBar  />
         <Feed />
         <RightBar/>

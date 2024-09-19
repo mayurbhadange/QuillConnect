@@ -80,10 +80,7 @@ exports.loginUser = async (req, res) => {
 exports.updateUser = async(req, res) => {
     try{
         const {id} = req.params;
-        if(req.body.password){
-            const salt = await bcrypt.genSalt(10);
-            req.body.password = await bcrypt.hash(req.body.password, salt);
-        }
+        console.log("backend data: ",req.body)
 
         const updatedUser = await user.findByIdAndUpdate(id, {$set: req.body}, {new:true});
         res.status(200).json({
@@ -162,6 +159,7 @@ exports.followUser = async(req, res) => {
 
 exports.unfollowUser = async(req, res) => {
     try{
+        console.log("on backend +++++++++++++======== >" , req.body)
         const nextUser = await user.findById(req.params.id) ;
         const self = await user.findById(req.body.userId);
 
@@ -176,6 +174,10 @@ exports.unfollowUser = async(req, res) => {
 
                 //remove the self to the followers list of the user
                 await nextUser.updateOne({ $pull : { followers : req.body.userId }})
+
+                console.log('self: ',self)
+                console.log("nextUser:", nextUser)
+
 
             }else{
                 res.status(404).json("You already not follow the user")

@@ -1,8 +1,59 @@
-import React from 'react';
-import { Box, Text, Flex, Image, Icon, Divider, Stack, SimpleGrid } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { Box, Text, Flex, Image, Icon, Divider, Stack, SimpleGrid, HStack, Button } from '@chakra-ui/react';
+import {EditIcon} from '@chakra-ui/icons'
 import { FaGift } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useContext } from 'react';
+import {UserContext} from '../context/UserContext';
 
 const RightSidebar = ( {user} ) => {
+  const {id} = useParams();
+  const [isFollowed, setIsFollowed] = useState(false);
+  const selfUser = useContext(UserContext).user;
+
+  const followHandler = async() => {
+    try{
+        console.log("followuser")
+        await axios.put(`http://localhost:3000/api/user/followUser/${id}`, {userId : selfUser._id});
+        setIsFollowed(!isFollowed);
+        console.log("followed successfully")
+    }catch(err){
+      console.log("error while following => ", err)
+    }
+  }
+
+  const unfollowHandler = async() => {
+    try{
+        await axios.put(`http://localhost:3000/api/user/unfollowUser/${id}`, {userId : selfUser._id});
+        setIsFollowed(!isFollowed);
+        console.log("unfollowed successfully")
+    }catch(err){
+      console.log("error while unfollowing => ", err)
+    }
+  }
+
+  useEffect(()=>{
+    const fetchUser = async() => {
+      console.log('use effect called -=============>')
+      if(id){
+        try {
+          const response = await axios.get(`http://localhost:3000/api/user/getUser/${id}`);
+          const nextUser = response.data.data;
+
+          if(user.followings.includes(nextUser._id)){
+            setIsFollowed(false);
+          }else{
+            setIsFollowed(true);
+          }
+        } catch (err) {
+          console.log("Error fetching user data:", err);
+          window.location.href = '/nopage'; // Redirect if error occurs
+        } 
+      }
+    }
+    fetchUser();
+  },[id])
 
   const homePageComponent = () => {
     return (
@@ -143,7 +194,14 @@ const RightSidebar = ( {user} ) => {
     return (
       <>
         <Stack borderBottom={'white 1px solid'} pb={3}> 
-          <Text fontSize={'2xl'}>User Information: </Text>        
+          <HStack>
+            <Text fontSize={'2xl'}>User Information: </Text>   
+            {!id ? <EditIcon onClick={()=>{window.location.href = '/editDetails'}}/> :
+                      (isFollowed ? 
+                      <Button colorScheme='teal' variant='outline' onClick={unfollowHandler} >Unfollow</Button> : 
+                        <Button colorScheme='teal' variant='outline' onClick={followHandler} >Follow</Button>)
+            }             
+          </HStack>
           <Box>
             <Text> Location : {user.location}  </Text>
             <Text> Followers : {user.followers ? user.followers.length : 0} </Text>
