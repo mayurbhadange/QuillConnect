@@ -82,6 +82,12 @@ exports.updateUser = async(req, res) => {
         const {id} = req.params;
         console.log("backend data: ",req.body)
 
+        if(req.body.password){
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(req.body.password, salt);
+            req.body.password = hashPassword;
+        }
+
         const updatedUser = await user.findByIdAndUpdate(id, {$set: req.body}, {new:true});
         res.status(200).json({
             success : true,
