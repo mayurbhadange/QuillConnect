@@ -8,9 +8,11 @@ import axios from 'axios';
 import Conversation from '../components/conversation';
 import ChatSection from '../components/chatsection';
 import {io} from "socket.io-client"
+import { OnlineFriend } from '../context/OnlineFriend';
 
 const Messenger = () => {
   const {user} = useContext(UserContext)
+  const {onlinefriends, setOnlineFriends} = useContext(OnlineFriend)
   // ... (keep the existing users and chats arrays)
   const [users, setUsers] = useState([])
   const [newConvo, setIsNewConvo] = useState(false)
@@ -28,7 +30,8 @@ const Messenger = () => {
   useEffect(()=>{
     socket?.current.emit("addUser", user._id)   
     socket?.current.on("getUsers", users => {
-      console.log("online users: ", users);
+      console.log("online f: ", onlinefriends);
+      setOnlineFriends(users);
     })
   },[user])
  

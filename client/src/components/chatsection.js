@@ -13,6 +13,13 @@ const Chatsection = ({ selectedConversations , newConvo}) => {
     const [msg, setMsg] = useState("");
     const socket = useRef();
 
+    // Reference for the end of the chat
+    const messagesEndRef = useRef(null);
+
+    // Function to scroll to the bottom of the chat
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
     useEffect(() => { 
         socket.current = io("ws://localhost:8900");
@@ -23,6 +30,7 @@ const Chatsection = ({ selectedConversations , newConvo}) => {
                 message: data.text,
                 createdAt: Date.now(),
             });
+            scrollToBottom();
         });
     }, []); 
  
@@ -30,16 +38,10 @@ const Chatsection = ({ selectedConversations , newConvo}) => {
     useEffect(()=>{
         arrivalChat && selectedConversations?.members.includes(arrivalChat.senderId) &&
         setChats(prev => [...prev, arrivalChat]);
+        scrollToBottom();
         console.log("chatschatschatschatschats", chats)
-    }, [arrivalChat, selectedConversations])
+    }, [arrivalChat])
 
-    // Reference for the end of the chat
-    const messagesEndRef = useRef(null);
-
-    // Function to scroll to the bottom of the chat
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
 
     const megSender = async () => {
         try {
@@ -62,7 +64,7 @@ const Chatsection = ({ selectedConversations , newConvo}) => {
                 message: msg
             };
             const res = await axios.post(`http://localhost:3000/api/message/createMessage`, newMessage);
-            setChats([...chats, newMessage]);  // Add the new message to the list
+            // setChats([...chats, newMessage]);  // Add the new message to the list
             setMsg("");  // Clear the input box
             scrollToBottom();  // Scroll to the latest message after sending
         } catch (err) {

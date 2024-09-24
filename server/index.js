@@ -1,14 +1,14 @@
 const express = require('express');
-const app = express();
-const cors = require('cors');
+const app = express(); 
+const cors = require('cors'); 
 app.use(cors());
 
 
 require('dotenv').config();
 const PORT = process.env.PORT || 4000;
-
+ 
 const bodyParser = require('body-parser');
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 
 app.listen(PORT,()=>{
     console.log(`server started at port no ${PORT}`);
