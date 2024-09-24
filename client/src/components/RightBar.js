@@ -35,17 +35,17 @@ const RightSidebar = ( {user} ) => {
 
   useEffect(()=>{
     const fetchUser = async() => {
-      console.log('use effect called -=============>')
       if(id){
         try {
           const response = await axios.get(`http://localhost:3000/api/user/getUser/${id}`);
           const nextUser = response.data.data;
 
-          if(user.followings.includes(nextUser._id)){
-            setIsFollowed(false);
-          }else{
+          if(selfUser.followings.includes(nextUser._id)){
             setIsFollowed(true);
+          }else{
+            setIsFollowed(false);
           }
+
         } catch (err) {
           console.log("Error fetching user data:", err);
           window.location.href = '/nopage'; // Redirect if error occurs
@@ -53,7 +53,7 @@ const RightSidebar = ( {user} ) => {
       }
     }
     fetchUser();
-  },[id])
+  },[]);
 
   const homePageComponent = () => {
     return (

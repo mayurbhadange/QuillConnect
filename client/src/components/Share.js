@@ -80,7 +80,7 @@ const Share = () => {
       <Flex alignItems="center" mb={4}>
         <Avatar
           size="md"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
+          src= {user.profilePicture}
           mr={3}
         />
         <Input

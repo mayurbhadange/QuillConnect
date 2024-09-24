@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password:{
+    password:{ 
         type: String,
         required: true
     },
@@ -35,11 +35,11 @@ const userSchema = new mongoose.Schema({
     }],
     profilePicture:{
         type: String,
-        default: "https://firebasestorage.googleapis.com/v0/b/sharefun-dc053.appspot.com/o/media%2Fimages%2FdefaultProfilePicture.jpg?alt=media&token=657fb254-8e45-443c-b791-e1e67b38edae"
+        default: "https://firebasestorage.googleapis.com/v0/b/sharefun-dc053.appspot.com/o/media%2Fimages%2FdefaultProfilePicture.jpg?alt=media&token=12594fa8-81ef-4aa9-9263-24d9ed6cf36f"
     },
-    coverPicture : {
+    coverPicture : { 
         type: String,
-        default: "https://firebasestorage.googleapis.com/v0/b/sharefun-dc053.appspot.com/o/media%2Fimages%2FdefaultCoverPicture.jpg?alt=media&token=b68f8668-060e-4231-8f7a-8818183eb9b3"
+        default: "https://firebasestorage.googleapis.com/v0/b/sharefun-dc053.appspot.com/o/media%2Fimages%2FdefaultCoverPicture.jpg?alt=media&token=58b1c85c-7969-4c0a-8860-a24c2f7d7281"
     },
     location : {
         type: String,

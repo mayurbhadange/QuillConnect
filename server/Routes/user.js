@@ -15,4 +15,4 @@ router.delete('/deleteUser/:id', deleteUser);
 router.put('/followUser/:id', followUser);
 router.put('/unfollowUser/:id', unfollowUser);
 
-module.exports = router;
+module.exports = router; 

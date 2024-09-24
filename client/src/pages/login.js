@@ -44,7 +44,7 @@ const LoginPage = () => {
       // Show error toast if login fails
       toast({
         title: 'Error logging in',
-        description: error.response?.data?.message || "An error occurred while logging in.",
+        description: error.response?.data || "An error occurred while logging in.",
         status: 'error',
         duration: 9000,
         isClosable: true,

@@ -8,6 +8,7 @@ import {
   Avatar,
   Box,
   Icon,
+  Link,
 } from '@chakra-ui/react';
 import {
   FiRss,
@@ -60,7 +61,9 @@ const Sidebar = () => {
       >
         <VStack align="stretch" spacing={3} pt={4}>
           <MenuItem icon={FiRss}>Feed</MenuItem>
-          <MenuItem icon={FiMessageSquare}>Chats</MenuItem>
+          <Link href="/messenger" textDecoration={'none'} _hover={{textDecoration: "none"  , zoom : 1.05  }}>
+            <MenuItem icon={FiMessageSquare}>Chats</MenuItem>
+          </Link>
           <MenuItem icon={FiVideo}>Videos</MenuItem>
           <MenuItem icon={FiUsers}>Groups</MenuItem>
           <MenuItem icon={FiBookmark}>Bookmarks</MenuItem>

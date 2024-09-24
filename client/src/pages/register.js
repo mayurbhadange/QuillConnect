@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const RegisterPage = () => {
   const toast = useToast();
-  const [user, setUser] = useState({ username: "", email: "", password: "" });
+  const [user, setUser] = useState({ name: "", username: "", email: "", password: "" });
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async (e) => {
@@ -82,6 +82,18 @@ const RegisterPage = () => {
           </Text>
           <form onSubmit={handleSubmit} >
             <Stack spacing={4}>
+              {/* name */}
+              <FormControl id="Name">
+                <Input
+                  type="text"
+                  placeholder="Name"
+                  value={user.name}
+                  onChange={(e) => setUser({ ...user, name: e.target.value })}
+                  bg="gray.700"
+                  color="gray.300"
+                />
+              </FormControl>
+
               {/* Username */}
               <FormControl id="UserName">
                 <Input

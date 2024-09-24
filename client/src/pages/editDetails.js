@@ -80,7 +80,7 @@ const EditDetailsPage = () => {
         console.log("file: ", file);
   
         // Create a storage reference
-        const storageRef = ref(storage, `images/${file.name}`);
+        const storageRef = ref(storage, `media/images/${file.name}`);
         
         // Upload the file
         const snapshot = await uploadBytes(storageRef, file);

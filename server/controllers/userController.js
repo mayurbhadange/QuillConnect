@@ -18,7 +18,7 @@ exports.getAllUsers = async(req, res) => {
 
 exports.createUser = async (req, res) => {
     try{
-        const {name,username, email, password} = req.body; 
+        const {name, username, email, password} = req.body; 
         //check wheather the user already exists or not
         const User = await user.findOne({email: email});
         if(User){
@@ -80,7 +80,7 @@ exports.loginUser = async (req, res) => {
 exports.updateUser = async(req, res) => {
     try{
         const {id} = req.params;
-        console.log("backend data: ",req.body)
+        console.log("backend data: ",req.body);
 
         if(req.body.password){
             const salt = await bcrypt.genSalt(10);
@@ -102,7 +102,9 @@ exports.updateUser = async(req, res) => {
 exports.getUser = async(req, res)=>{
     try{
         const {id} = req.params;
+        console.log('id :', id)
         const currUser = await user.findById(id);
+        console.log('currUser :', currUser)
         const {password, ...others} = currUser._doc;
         res.status(200).json({
             success : true,
