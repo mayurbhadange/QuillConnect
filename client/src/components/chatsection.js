@@ -115,9 +115,9 @@ const Chatsection = ({ selectedConversations , newConvo}) => {
         <>
             {/* Chat header */}
             <Box p={4} borderBottom="1px solid" borderColor="gray.600">
-                <HStack>
+                <HStack _hover={{ cursor: "pointer" }} onClick={()=> window.location.href = `/profile/${selectedUser._id}`}>
                     <Avatar src={selectedUser != null && selectedUser.profilePicture} alt={selectedUser != null && selectedUser.username} mr={2} size="md" />
-                    <Text color="white" fontSize="xl" fontWeight="bold">{selectedUser != null && selectedUser.username}</Text>
+                    <Text color="white" fontSize="xl" fontWeight="bold">{selectedUser?.name}</Text>
                 </HStack>
             </Box>
 

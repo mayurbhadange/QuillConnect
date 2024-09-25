@@ -53,7 +53,6 @@ exports.getLastMessage = async (req, res) => {
 exports.deleteMessage = async (req, res) =>{
     try{
         const id = req.params.messageId;
-        console.log(id);
         const deletedMessage = await message.findByIdAndDelete(id);
         res.status(200).json({
             success: true,

@@ -8,7 +8,7 @@ exports.createComment = async (req, res) => {
         
         // Push the comment ID to the corresponding post's comments array
         const updateUser = await Post.findByIdAndUpdate(postId, { $push: { comments: newComment._id } });
-        console.log(newComment)
+        
         res.status(200).json(
             {
                 success: true,

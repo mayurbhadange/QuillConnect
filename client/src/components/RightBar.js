@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Image, Icon, Divider, Stack, SimpleGrid, HStack, Button } from '@chakra-ui/react';
-import {EditIcon} from '@chakra-ui/icons'
+import {EditIcon, ChatIcon} from '@chakra-ui/icons'
 import { FaGift } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useContext } from 'react';
 import {UserContext} from '../context/UserContext';
 import FollowerFriend from './FollowerFriend';
+import { OnlineFriend } from '../context/OnlineFriend';
+import OnlineFriendComponent from '../components/OnlineFriendComponent'
 
 const RightSidebar = ( {user} ) => {
   const {id} = useParams();
@@ -16,6 +18,7 @@ const RightSidebar = ( {user} ) => {
 
   const fetchfollowers = async()=>{
     try{
+      console.log("xxxxxxxx",user)
       const res = await axios.get(`http://localhost:3000/api/user/getUser/${user._id}`);
       console.log("followers", res?.data.data.followers) 
       setFollowers(res?.data.data.followers)
@@ -45,6 +48,10 @@ const RightSidebar = ( {user} ) => {
     }
   }
 
+  const handleMessageClick = () => {
+    window.location.href = '/messenger'
+  }
+
   useEffect(()=>{
     const fetchUser = async() => {
       if(id){
@@ -68,7 +75,9 @@ const RightSidebar = ( {user} ) => {
     fetchfollowers();
   },[]);
 
-  const homePageComponent = () => {
+  const HomePageComponent = () => {
+    const {onlinefriends} = useContext(OnlineFriend);
+    console.log("zzzzzzzzzzzz",onlinefriends);
     return (
       <>
         {/* Birthdays Section */}
@@ -97,106 +106,11 @@ const RightSidebar = ( {user} ) => {
             Online Friends
           </Text>
 
-          {/* Repeat for online friends */}
-          <Flex align="center" mb="3">
-            <Image
-              boxSize="40px"
-              borderRadius="full"
-              src="https://bit.ly/prosper-baba"
-              alt="Safak Kocaoglu"
-            />
-            <Box ml="3">
-              <Text fontWeight="bold" fontSize="sm">
-                Safak Kocaoglu
-              </Text>
-              <Box as="span" color="green.400" boxSize="3" borderRadius="50%" bg="green.400" />
-            </Box>
-          </Flex>
-          <Flex align="center" mb="3">
-            <Image
-              boxSize="40px"
-              borderRadius="full"
-              src="https://bit.ly/prosper-baba"
-              alt="Safak Kocaoglu"
-            />
-            <Box ml="3">
-              <Text fontWeight="bold" fontSize="sm">
-                Safak Kocaoglu
-              </Text>
-              <Box as="span" color="green.400" boxSize="3" borderRadius="50%" bg="green.400" />
-            </Box>
-          </Flex>
-          <Flex align="center" mb="3">
-            <Image
-              boxSize="40px"
-              borderRadius="full"
-              src="https://bit.ly/prosper-baba"
-              alt="Safak Kocaoglu"
-            />
-            <Box ml="3">
-              <Text fontWeight="bold" fontSize="sm">
-                Safak Kocaoglu
-              </Text>
-              <Box as="span" color="green.400" boxSize="3" borderRadius="50%" bg="green.400" />
-            </Box>
-          </Flex>
-          <Flex align="center" mb="3">
-            <Image
-              boxSize="40px"
-              borderRadius="full"
-              src="https://bit.ly/prosper-baba"
-              alt="Safak Kocaoglu"
-            />
-            <Box ml="3">
-              <Text fontWeight="bold" fontSize="sm">
-                Safak Kocaoglu
-              </Text>
-              <Box as="span" color="green.400" boxSize="3" borderRadius="50%" bg="green.400" />
-            </Box>
-          </Flex>
-          <Flex align="center" mb="3">
-            <Image
-              boxSize="40px"
-              borderRadius="full"
-              src="https://bit.ly/prosper-baba"
-              alt="Safak Kocaoglu"
-            />
-            <Box ml="3">
-              <Text fontWeight="bold" fontSize="sm">
-                Safak Kocaoglu
-              </Text>
-              <Box as="span" color="green.400" boxSize="3" borderRadius="50%" bg="green.400" />
-            </Box>
-          </Flex>
-          <Flex align="center" mb="3">
-            <Image
-              boxSize="40px"
-              borderRadius="full"
-              src="https://bit.ly/prosper-baba"
-              alt="Safak Kocaoglu"
-            />
-            <Box ml="3">
-              <Text fontWeight="bold" fontSize="sm">
-                Safak Kocaoglu
-              </Text>
-              <Box as="span" color="green.400" boxSize="3" borderRadius="50%" bg="green.400" />
-            </Box>
-          </Flex>
-          <Flex align="center" mb="3">
-            <Image
-              boxSize="40px"
-              borderRadius="full"
-              src="https://bit.ly/prosper-baba"
-              alt="Safak Kocaoglu"
-            />
-            <Box ml="3">
-              <Text fontWeight="bold" fontSize="sm">
-                Safak Kocaoglu
-              </Text>
-              <Box as="span" color="green.400" boxSize="3" borderRadius="50%" bg="green.400" />
-            </Box>
-          </Flex>
-
+          {
+            onlinefriends?.map((onlineFriend)=>{
+              return <OnlineFriendComponent userId = {onlineFriend.userId} />
+            })
+          }
           
         </Box>
       </>
@@ -213,7 +127,17 @@ const RightSidebar = ( {user} ) => {
                       (isFollowed ? 
                       <Button colorScheme='teal' variant='outline' onClick={unfollowHandler} >Unfollow</Button> : 
                         <Button colorScheme='teal' variant='outline' onClick={followHandler} >Follow</Button>)
-            }             
+            }          
+             { ( id &&
+                <Button
+                  colorScheme="blue"
+                  variant="solid"
+                  onClick={handleMessageClick}
+                >
+                  <ChatIcon />
+                </Button>
+                
+              )}   
           </HStack>
           <Box>
             <Text> Location : {user.location}  </Text>
@@ -250,7 +174,7 @@ const RightSidebar = ( {user} ) => {
       top="16"
       height="100vh"
     >
-      {user ? profilePageComponent() : homePageComponent()}  
+      {user ? profilePageComponent() : HomePageComponent()}  
     </Box>
   );
 };

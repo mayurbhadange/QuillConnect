@@ -48,7 +48,6 @@ exports.createUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     try {
-        console.log(req.body);
         const { email, password } = req.body;
         const User = await user.findOne({ email: email });
         console.log(User)
@@ -80,7 +79,6 @@ exports.loginUser = async (req, res) => {
 exports.updateUser = async(req, res) => {
     try{
         const {id} = req.params;
-        console.log("backend data: ",req.body);
 
         if(req.body.password){
             const salt = await bcrypt.genSalt(10);
@@ -102,9 +100,7 @@ exports.updateUser = async(req, res) => {
 exports.getUser = async(req, res)=>{
     try{
         const {id} = req.params;
-        console.log('id :', id)
         const currUser = await user.findById(id);
-        console.log('currUser :', currUser)
         const {password, ...others} = currUser._doc;
         res.status(200).json({
             success : true,
@@ -167,7 +163,6 @@ exports.followUser = async(req, res) => {
 
 exports.unfollowUser = async(req, res) => {
     try{
-        console.log("on backend +++++++++++++======== >" , req.body)
         const nextUser = await user.findById(req.params.id) ;
         const self = await user.findById(req.body.userId);
 

@@ -3,7 +3,6 @@ const message = require('../models/messageSchema');
 
 exports.createConversation = async (req, res) => {
     try{
-        console.log(req.body.members);
         const newConversation = await conversation.create({ members : [...req.body.members] });
 
         res.status(200).json({
@@ -20,8 +19,6 @@ exports.createConversation = async (req, res) => {
 exports.getSingleConversation = async (req, res) => {
     try {
         const { id1, id2 } = req.query;  // Use req.query for GET requests
-        
-        console.log("id1: ", id1, "id2: ", id2);
         
         // Find the conversation where both id1 and id2 are members
         const conversations = await conversation.find({

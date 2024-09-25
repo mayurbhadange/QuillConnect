@@ -1,26 +1,23 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Avatar, Box, Button, HStack, Input, Text, VStack, List, ListItem, Heading, Icon, Flex } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
-import { BiCheckDouble } from "react-icons/bi";
 import { FaHome } from "react-icons/fa";
 import { UserContext } from '../context/UserContext';
 import axios from 'axios';
 import Conversation from '../components/conversation';
 import ChatSection from '../components/chatsection';
-import {io} from "socket.io-client"
 import { OnlineFriend } from '../context/OnlineFriend';
+import { io } from 'socket.io-client';
 
 const Messenger = () => {
   const {user} = useContext(UserContext)
-  const {onlinefriends, setOnlineFriends} = useContext(OnlineFriend)
-  // ... (keep the existing users and chats arrays)
   const [users, setUsers] = useState([])
   const [newConvo, setIsNewConvo] = useState(false)
   const [conversations, setConversations] = useState([]);
   const [selectedConversations, setSelectedConversations] = useState(null);
-  const [chats, setChats] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const {onlinefriends, setOnlineFriends} = useContext(OnlineFriend);
   const socket = useRef();
 
   useEffect(()=>{
@@ -31,21 +28,21 @@ const Messenger = () => {
     socket?.current.emit("addUser", user._id)   
     socket?.current.on("getUsers", users => {
       setOnlineFriends(users);
-      console.log("online f: ", onlinefriends); 
+      console.log("online online f: ", onlinefriends); 
     })
   },[user])
  
   
-  //fetch user
-  const fetchUser = async(userId)=> {
-    try{
-      const res = await axios.get(`http://localhost:3000/api/user/getUser/${userId}`)
-      return res;
-    }catch(error){
-      console.error(error)
-      return null;
-    }
-  }
+  // //fetch user
+  // const fetchUser = async(userId)=> {
+  //   try{
+  //     const res = await axios.get(`http://localhost:3000/api/user/getUser/${userId}`)
+  //     return res;
+  //   }catch(error){
+  //     console.error(error)
+  //     return null;
+  //   }
+  // }
 
   //fetch all users
   const fetchAllUsers = async()=> {
@@ -62,7 +59,6 @@ const Messenger = () => {
 
       const id1 = u._id;
       const id2 = user._id;
-      console.log("id1: ", id1, " id2: ", id2);
       const res = await axios.get(`http://localhost:3000/api/conversation/getSingleConversation?id1=${id1}&id2=${id2}`);
       console.log("res",res.data.data[0]);
       if(res.data.data.length === 0){
@@ -103,11 +99,9 @@ const Messenger = () => {
     fetchConversations();
     fetchAllUsers();
     
-    console.log("conversations",conversations)
   },[user])
 
   const chatOpener = (conver) => {
-    console.log("conver",conver)
     setSelectedConversations(conver);
     setSearchTerm('');
   };
