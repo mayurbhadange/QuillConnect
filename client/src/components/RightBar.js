@@ -6,11 +6,23 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useContext } from 'react';
 import {UserContext} from '../context/UserContext';
+import FollowerFriend from './FollowerFriend';
 
 const RightSidebar = ( {user} ) => {
   const {id} = useParams();
   const [isFollowed, setIsFollowed] = useState(false);
+  const [followers, setFollowers] = useState([]);
   const selfUser = useContext(UserContext).user;
+
+  const fetchfollowers = async()=>{
+    try{
+      const res = await axios.get(`http://localhost:3000/api/user/getUser/${user._id}`);
+      console.log("followers", res?.data.data.followers) 
+      setFollowers(res?.data.data.followers)
+    }catch(error){
+      console.error(error)
+    }
+  }
 
   const followHandler = async() => {
     try{
@@ -53,6 +65,7 @@ const RightSidebar = ( {user} ) => {
       }
     }
     fetchUser();
+    fetchfollowers();
   },[]);
 
   const homePageComponent = () => {
@@ -215,128 +228,13 @@ const RightSidebar = ( {user} ) => {
           {/* Grid for Rectangular Images */}
           <SimpleGrid columns={3} spacing={5}>
             {/* Repeat Image block for each friend */}
-            <Box textAlign="center">
-              <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                alt="Mrunal Thakur"
-                height="120px"  // Custom height to make it rectangular
-                width="100px"   // Custom width to make it rectangular
-                objectFit="cover"
-                borderRadius="md"
-                _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-              />
-              <Text fontSize={18} mt={1}>Mrunal Thakur</Text>
-            </Box>
-            <Box textAlign="center">
-              <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                alt="Mrunal Thakur"
-                height="120px"  // Custom height to make it rectangular
-                width="100px"   // Custom width to make it rectangular
-                objectFit="cover"
-                borderRadius="md"
-                _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-              />
-              <Text fontSize={18} mt={1}>Mrunal Thakur</Text>
-            </Box>
-            <Box textAlign="center">
-              <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                alt="Mrunal Thakur"
-                height="120px"  // Custom height to make it rectangular
-                width="100px"   // Custom width to make it rectangular
-                objectFit="cover"
-                borderRadius="md"
-                _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-              />
-              <Text fontSize={18} mt={1}>Mrunal Thakur</Text>
-            </Box>
-            <Box textAlign="center">
-              <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                alt="Mrunal Thakur"
-                height="120px"  // Custom height to make it rectangular
-                width="100px"   // Custom width to make it rectangular
-                objectFit="cover"
-                borderRadius="md"
-                _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-              />
-              <Text fontSize={18} mt={1}>Mrunal Thakur</Text>
-            </Box>
-            <Box textAlign="center">
-              <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                alt="Mrunal Thakur"
-                height="120px"  // Custom height to make it rectangular
-                width="100px"   // Custom width to make it rectangular
-                objectFit="cover"
-                borderRadius="md"
-                _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-              />
-              <Text fontSize={18} mt={1}>Mrunal Thakur</Text>
-            </Box>
-            <Box textAlign="center">
-              <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                alt="Mrunal Thakur"
-                height="120px"  // Custom height to make it rectangular
-                width="100px"   // Custom width to make it rectangular
-                objectFit="cover"
-                borderRadius="md"
-                _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-              />
-              <Text fontSize={18} mt={1}>Mrunal Thakur</Text>
-            </Box>
-            <Box textAlign="center">
-              <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                alt="Mrunal Thakur"
-                height="120px"  // Custom height to make it rectangular
-                width="100px"   // Custom width to make it rectangular
-                objectFit="cover"
-                borderRadius="md"
-                _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-              />
-              <Text fontSize={18} mt={1}>Mrunal Thakur</Text>
-            </Box>
-            <Box textAlign="center">
-              <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                alt="Mrunal Thakur"
-                height="120px"  // Custom height to make it rectangular
-                width="100px"   // Custom width to make it rectangular
-                objectFit="cover"
-                borderRadius="md"
-                _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-              />
-              <Text fontSize={18} mt={1}>Mrunal Thakur</Text>
-            </Box>
-            <Box textAlign="center">
-              <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                alt="Mrunal Thakur"
-                height="120px"  // Custom height to make it rectangular
-                width="100px"   // Custom width to make it rectangular
-                objectFit="cover"
-                borderRadius="md"
-                _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-              />
-              <Text fontSize={18} mt={1}>Mrunal Thakur</Text>
-            </Box>
-            <Box textAlign="center">
-              <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS4HUkcYlV9504oJAIFAuoXwTzG5IziwRjmQ&s"
-                alt="Mrunal Thakur"
-                height="120px"  // Custom height to make it rectangular
-                width="100px"   // Custom width to make it rectangular
-                objectFit="cover"
-                borderRadius="md"
-                _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-              />
-              <Text fontSize={18} mt={1}>Mrunal Thakur</Text>
-            </Box>
 
-            {/* Repeat similar blocks for other friends */}
+            {
+              followers.map((followerId, index) => (
+                <FollowerFriend key={index} id={followerId} />
+              ))
+            }
+
           </SimpleGrid>
         </Stack>
       </>

@@ -30,4 +30,4 @@ app.use('/api/comment',comment);
 app.use('/api/auth', auth);
 app.use('/api/posts', posts); 
 app.use('/api/conversation', conversation);
-app.use('/api/message', message);  
+app.use('/api/message', message);   
