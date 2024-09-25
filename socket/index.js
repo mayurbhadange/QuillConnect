@@ -15,7 +15,7 @@ const addUser = (userId, socketId) => {
 };
 
 const getUser = (userId) => {
-    console.log("socket users:", users);
+    console.log("socket users:", users); 
     return users.find(user => user.userId == userId);
 };
 
