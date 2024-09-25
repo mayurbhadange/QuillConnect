@@ -13,7 +13,12 @@ const commentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    username : {
+    name : {
+        type: String,
+        default : "",
+        required : true
+    },
+    profilePicture : {
         type: String,
         default : "",
         required : true

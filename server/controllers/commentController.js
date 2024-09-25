@@ -3,8 +3,8 @@ const Post = require('../models/postSchema')
 exports.createComment = async (req, res) => {
     try{
         const postId = req.params.id;
-        const {comment,userId, username} = req.body;
-        const newComment = await Comment.create({comment, username, postId, userId});
+        const {comment,userId,profilePicture, name} = req.body;
+        const newComment = await Comment.create({comment, name, profilePicture, postId, userId});
         
         // Push the comment ID to the corresponding post's comments array
         const updateUser = await Post.findByIdAndUpdate(postId, { $push: { comments: newComment._id } });

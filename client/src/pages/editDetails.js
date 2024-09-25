@@ -13,12 +13,14 @@ import {
   Image,
   HStack,
   IconButton,
+  Icon
 } from '@chakra-ui/react';
 import { Camera, MapPin } from 'lucide-react';
 import { UserContext } from '../context/UserContext';
 import axios from 'axios';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase"; // Adjust the import based on your structure
+import { FaHome } from "react-icons/fa";
 
 const EditDetailsPage = () => {
     const {user} = useContext(UserContext);
@@ -35,11 +37,11 @@ const EditDetailsPage = () => {
     email: user.email,
     location: user.location,
     bio: user.bio,
-    password: "",
     profilePicture: user.profilePicture,
     coverPicture: user.coverPicture,
   });
 
+  const [password, setPassword] = useState('');
   const toast = useToast();
 
   const handleChange = (e) => {
@@ -115,6 +117,13 @@ const EditDetailsPage = () => {
         coverPicture: coverPictureURL || formData.coverPicture,  // Retain old URL if no new file is uploaded
         profilePicture: profilePictureURL || formData.profilePicture,  // Same for profilePicture
       };
+
+      if(password){
+        updatedFormData = {
+          ...updatedFormData,
+          password: password
+        };
+      }
   
       // Send the updatedFormData to your backend API for saving to MongoDB
       await axios.put(`http://localhost:3000/api/user/updateUser/${user._id}`, updatedFormData);
@@ -153,7 +162,9 @@ const EditDetailsPage = () => {
 
 
   return (
-    <Container maxW="container.md" py={8}>
+    <Box p={5}>
+    <Icon as={FaHome} boxSize={6} size={5} color="white" onClick={()=>window.location.href='/'} />
+    <Container maxW="container.md" >
       <VStack spacing={8} align="stretch">
         <Box position="relative" h="200px" overflow="hidden" borderRadius="lg">
           <Image
@@ -223,7 +234,7 @@ const EditDetailsPage = () => {
 
             <FormControl>
               <FormLabel>Password</FormLabel>
-              <Input  name="password" type="password" minLength={'6'} placeholder='Enter new password...' value={formData.password} onChange={handleChange} />
+              <Input  name="password" type="password" minLength={'6'} placeholder='Enter new password...' value={password} onChange={(e)=>setPassword(e.target.value)} />
             </FormControl>
 
             <FormControl>
@@ -244,6 +255,7 @@ const EditDetailsPage = () => {
         </form>
       </VStack>
     </Container>
+            </Box>
   );
 };
 

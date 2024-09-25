@@ -83,10 +83,6 @@ const Sidebar = () => {
             <Text fontWeight="medium">Jane Doe</Text>
           </HStack>
 
-          {/* Additional items to demonstrate scrolling */}
-          {[...Array(10)].map((_, i) => (
-            <MenuItem key={i} icon={FiRss}>Additional Item {i + 1}</MenuItem>
-          ))}
         </VStack>
       </Box>
     </Box>

@@ -15,6 +15,7 @@ const CommentSection = ({ postId }) => {
       try {
           const response = await axios.get(`http://localhost:3000/api/comment/getAllComments/${postId}`);
           setComments(response.data.data );
+          console.log("comments", response.data.data);
         } catch (error) {
             console.error('Error fetching comments:', error);
         }
@@ -26,8 +27,9 @@ const CommentSection = ({ postId }) => {
     try {
       const response = await axios.post(`http://localhost:3000/api/comment/${postId}`, {
           userId: currentUser._id,
-          username: currentUser.username,
+          name: currentUser.name,
         comment: newComment,
+        profilePicture: currentUser.profilePicture,
       });
       setComments([...comments, response.data.data.comment]);
       setNewComment('');
@@ -68,12 +70,12 @@ return (
               <Avatar 
                 size="sm" 
                 onClick={() => { window.location.href = `/profile/${comment.userId}`; }} 
-                src={'comment.user.profilePicture'} 
+                src={comment?.profilePicture} 
                 cursor="pointer"
               />
               <Box>
                 <HStack>
-                  <Text fontWeight="bold">{comment.username}</Text>
+                  <Text fontWeight="bold">{comment.name}</Text>
                   <Text fontSize="xs" color="gray.500">
                     {format(comment.createdAt)}
                   </Text>
