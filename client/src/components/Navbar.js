@@ -7,6 +7,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 
 const MotionBox = motion(Box);
+const AnimatedText = motion(Text);
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,8 +34,7 @@ export default function Navbar() {
       };
       fetchUser();
     }
-  }, []);
-
+  }, [userId]);
 
   const fetchAllUsers = async () => {
     try {
@@ -59,7 +59,7 @@ export default function Navbar() {
   }
 
   const handleSuggestionClick = (userId) => {
-    user._id === userId ? window.location.href = `/profile` : window.location.href = `/profile/${userId}`;
+    window.location.href = user._id === userId ? `/profile` : `/profile/${userId}`;
     setSuggestions([]);
     setSearchTerm("");
   }
@@ -86,7 +86,34 @@ export default function Navbar() {
           color={textColor}
         />
         <Link href="/" _hover={{ textDecoration: 'none' }}>
-          <Heading color={textColor} fontWeight="bold" fontSize={{ base: "xl", md: "2xl" }}>ShareFun</Heading>
+          <Flex alignItems="center">
+            <AnimatedText
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              color={textColor}
+              fontWeight="extrabold"
+              fontSize={{ base: "xl", md: "2xl" }}
+              fontStyle="italic"
+              textShadow="2px 2px 4px rgba(0,0,0,0.3)"
+              letterSpacing="wider"
+            >
+              Quill
+            </AnimatedText>
+            <AnimatedText
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              color={useColorModeValue("yellow.300", "yellow.200")}
+              fontWeight="extrabold"
+              fontSize={{ base: "xl", md: "2xl" }}
+              fontStyle="italic"
+              textShadow="2px 2px 4px rgba(0,0,0,0.3)"
+              letterSpacing="wider"
+            >
+              Connect
+            </AnimatedText>
+          </Flex>
         </Link>
 
         <HStack spacing={8} alignItems="center" flex={1} justifyContent="center">
@@ -112,7 +139,6 @@ export default function Navbar() {
                     <MotionBox
                       key={user._id}
                       p={2}
-                      // _hover={{ bg: "gray.100" }}
                       cursor="pointer"
                       onClick={() => handleSuggestionClick(user._id)}
                       whileHover={{ scale: 1.02 }}

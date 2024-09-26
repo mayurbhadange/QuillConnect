@@ -80,10 +80,6 @@ const Sidebar = () => {
           
           <Divider my={4} />
           
-          <HStack spacing={3}>
-            <Avatar size="sm" name="Jane Doe" src="https://bit.ly/broken-link" />
-            <Text fontWeight="medium">Jane Doe</Text>
-          </HStack>
 
         </VStack>
       </Box>
