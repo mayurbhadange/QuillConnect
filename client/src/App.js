@@ -8,11 +8,28 @@ import EditDetails from './pages/editDetails';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { UserContext } from './context/UserContext'; // Assuming you're using UserContext for user data
 import Messenger from './pages/messenger'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function App() {
-  const { user } = useContext(UserContext); // Access the current logged-in user
-  
+  const selfUserId = useContext(UserContext).userId;
+  const [user, setUser] = useState(null); // State to hold user data
+
+  useEffect(() => { 
+    if (selfUserId) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+          setUser(response.data.data);
+        } catch (err) {
+          console.error("Error fetching user:", err);
+        }
+      };
+      fetchUser();
+    }
+  }, [selfUserId]);
   return (
+    user &&
     <BrowserRouter>
       <Routes>
         {/* Home page */}
@@ -23,7 +40,7 @@ function App() {
             - /profile/:id for other users */}
         <Route 
           path="/profile" 
-          element={user ? <Profile user={user} /> : <Navigate to="/login" />} // Current user profile
+          element={ <Profile user={user} />} // Current user profile
         />
         <Route path="/profile/:id" element={<Profile />} /> {/* Other user profile */}
         

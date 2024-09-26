@@ -10,7 +10,7 @@ import { OnlineFriend } from '../context/OnlineFriend';
 import { io } from 'socket.io-client';
 
 const Messenger = () => {
-  const {user} = useContext(UserContext)
+  const userId = useContext(UserContext).userId;
   const [users, setUsers] = useState([])
   const [newConvo, setIsNewConvo] = useState(false)
   const [conversations, setConversations] = useState([]);
@@ -25,12 +25,12 @@ const Messenger = () => {
   },[])
 
   useEffect(()=>{
-    socket?.current.emit("addUser", user._id)   
+    socket?.current.emit("addUser", userId)   
     socket?.current.on("getUsers", users => {
       setOnlineFriends(users);
       console.log("online online f: ", onlinefriends); 
     })
-  },[user])
+  },[userId])
  
   
   // //fetch user
@@ -58,7 +58,7 @@ const Messenger = () => {
     try{
 
       const id1 = u._id;
-      const id2 = user._id;
+      const id2 = userId;
       const res = await axios.get(`http://localhost:3000/api/conversation/getSingleConversation?id1=${id1}&id2=${id2}`);
       console.log("res",res.data.data[0]);
       if(res.data.data.length === 0){
@@ -89,7 +89,7 @@ const Messenger = () => {
     // Fetch conversations from the server
     const fetchConversations = async () => {
       try{
-        const res = await axios.get(`http://localhost:3000/api/conversation/getConversation/${user._id}`)
+        const res = await axios.get(`http://localhost:3000/api/conversation/getConversation/${userId}`)
         setConversations(res.data.data) 
       }catch(error){
         console.error(error) 
@@ -99,7 +99,7 @@ const Messenger = () => {
     fetchConversations();
     fetchAllUsers();
     
-  },[user])
+  },[userId])
 
   const chatOpener = (conver) => {
     setSelectedConversations(conver);

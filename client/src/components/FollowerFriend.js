@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 const FollowerFriend = ({ id }) => {
-    const selfUser = useContext(UserContext).user;
+    const selfUserId = useContext(UserContext).userId;
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const FollowerFriend = ({ id }) => {
                 objectFit="cover"
                 borderRadius="md"
                 _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-                onClick={() => selfUser._id == user?._id ? window.location.href = `/profile` : navigate(`/profile/${user._id}`)} // Redirect to user profile on click
+                onClick={() => selfUserId == user?._id ? window.location.href = `/profile` : navigate(`/profile/${user._id}`)} // Redirect to user profile on click
             />
             <Text fontSize={18} mt={1}>{user?.name}</Text>
         </Box>

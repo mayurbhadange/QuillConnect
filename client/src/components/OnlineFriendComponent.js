@@ -7,7 +7,7 @@ const OnlineFriendComponent = ({ userId }) => {
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
-  const selfuser = useContext(UserContext).user;
+  const selfuserId = useContext(UserContext).userId;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -40,7 +40,7 @@ const OnlineFriendComponent = ({ userId }) => {
   }
 
   return (
-    <Flex align="center" mb="3" onClick={()=>selfuser._id == userId ? window.location.href = `/profile` : window.location.href = `/profile/${userId}`} _hover={{cursor : "pointer"}}>
+    <Flex align="center" mb="3" onClick={()=>selfuserId == userId ? window.location.href = `/profile` : window.location.href = `/profile/${userId}`} _hover={{cursor : "pointer"}}>
       <Box position="relative">
         <Avatar
           boxSize="40px"

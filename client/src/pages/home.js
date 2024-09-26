@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import { io } from 'socket.io-client';
 
 const Home = () => {
-  const {user} = useContext(UserContext);
+  const {userId} = useContext(UserContext);
   const {onlinefriends, setOnlineFriends} = useContext(OnlineFriend);
   const socket = useRef();
 
@@ -21,14 +21,14 @@ const Home = () => {
   },[])
 
   useEffect(()=>{
-    socket?.current.emit("addUser", user._id)   
+    socket?.current.emit("addUser", userId)   
     socket?.current.on("getUsers", users => {
       setOnlineFriends(users);
       console.log("online online f: ", onlinefriends); 
     })
-  },[user])
-  console.log(user);
-  if(!user) {
+  },[userId])
+  console.log(userId);
+  if(!userId) {
     window.location.href = "/login";
   }
   return (

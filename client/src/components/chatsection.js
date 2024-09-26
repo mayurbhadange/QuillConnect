@@ -6,7 +6,7 @@ import axios from 'axios';
 import {io} from 'socket.io-client';
 
 const Chatsection = ({ selectedConversations , newConvo}) => {
-    const selfuser = useContext(UserContext).user;
+    const selfUserId = useContext(UserContext).userId;
     const [chats, setChats] = useState([]);
     const [arrivalChat, setArrivalChat] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -46,21 +46,19 @@ const Chatsection = ({ selectedConversations , newConvo}) => {
     const megSender = async () => {
         try {
             const newuser = newConvo && await axios.post(`http://localhost:3000/api/conversation/createConversation`, {
-                members : [selfuser._id, selectedConversations._id]
+                members : [selfUserId, selectedConversations._id]
             });
-
-            console.log(msg, selfuser , selectedConversations.members.find(userId => selfuser._id !== userId))
             
             console.log("newConvo", newuser)
             socket.current.emit("sendMessage", {
-                senderId : selfuser._id,
-                receiverId : selectedConversations.members.find(userId => selfuser._id !== userId),
+                senderId : selfUserId,
+                receiverId : selectedConversations.members.find(userId => selfUserId !== userId),
                 text : msg
             })
 
             const newMessage = {
                 conversationId: newConvo ? newuser.data.data._id : selectedConversations._id,
-                senderId: selfuser._id,
+                senderId: selfUserId,
                 message: msg
             };
             const res = await axios.post(`http://localhost:3000/api/message/createMessage`, newMessage);
@@ -103,7 +101,7 @@ const Chatsection = ({ selectedConversations , newConvo}) => {
     };
 
     useEffect(() => {
-        const friendId = !newConvo && selectedConversations.members.find((m) => m !== selfuser._id);
+        const friendId = !newConvo && selectedConversations.members.find((m) => m !== selfUserId);
         !newConvo && fetchMessages();
         !newConvo && getUser(friendId);
         newConvo && setChats([]);
@@ -124,18 +122,18 @@ const Chatsection = ({ selectedConversations , newConvo}) => {
             {/* Chat content area */}
             <VStack flex={1} overflowY="auto" p={4} spacing={4} alignItems="stretch">
                 {chats.map((chat, index) => (
-                    <HStack key={index} alignSelf={chat.senderId !== selfuser._id ? 'flex-start' : 'flex-end'} maxW="70%">
-                            {chat.senderId !== selfuser._id && (
+                    <HStack key={index} alignSelf={chat.senderId !== selfUserId ? 'flex-start' : 'flex-end'} maxW="70%">
+                            {chat.senderId !== selfUserId && (
                                 <Avatar src={selectedUser != null && selectedUser.profilePicture} alt={selectedUser != null && selectedUser.username} size="sm" />
                             )}
                         <HStack alignItems="flex-end" spacing={2}>
                             <VStack align={'end'} spacing={1}>
-                                <Text color="white" p={2} fontSize="md" rounded="md" bg={chat.senderId === selfuser._id ? 'blue.600' : 'gray.600'}>
+                                <Text color="white" p={2} fontSize="md" rounded="md" bg={chat.senderId === selfUserId ? 'blue.600' : 'gray.600'}>
                                     {chat.message}
                                 </Text>
                                 <HStack spacing={1}>
                                     <Text fontSize="xs" color="gray.400">{getTime(chat.createdAt)}</Text>
-                                    {chat.senderId === selfuser._id && (
+                                    {chat.senderId === selfUserId && (
                                         <BiCheckDouble color={chat.seen ? 'skyblue' : 'gray'} size={16} />
                                     )}
                                 </HStack>

@@ -12,25 +12,43 @@ import OnlineFriendComponent from '../components/OnlineFriendComponent'
 
 const RightSidebar = ( {user} ) => {
   const {id} = useParams();
-  const [isFollowed, setIsFollowed] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(null);
   const [followers, setFollowers] = useState([]);
-  const selfUser = useContext(UserContext).user;
+  const selfUserId = useContext(UserContext).userId;
+  const [selfUser, setUser] = useState(null);
+
+  useEffect(() => { 
+    if (selfUserId) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+          setUser(response.data.data);
+        } catch (err) {
+          console.error("Error fetching user:", err);
+        }
+      };
+      fetchUser();
+    }
+  }, []);
 
   const fetchfollowers = async()=>{
-    try{
-      console.log("xxxxxxxx",user)
-      const res = await axios.get(`http://localhost:3000/api/user/getUser/${user._id}`);
-      console.log("followers", res?.data.data.followers) 
-      setFollowers(res?.data.data.followers)
-    }catch(error){
-      console.error(error)
+    if(user){
+      try{
+        console.log("xxxxxxxx",user)
+        const res = await axios.get(`http://localhost:3000/api/user/getUser/${user._id}`);
+        console.log("followers", res?.data.data.followers) 
+        setFollowers(res?.data.data.followers)
+      }catch(error){ 
+        console.error(error)
+      }      
     }
+
   }
 
   const followHandler = async() => {
     try{
         console.log("followuser")
-        await axios.put(`http://localhost:3000/api/user/followUser/${id}`, {userId : selfUser._id});
+        await axios.put(`http://localhost:3000/api/user/followUser/${id}`, {userId : selfUserId});
         setIsFollowed(!isFollowed);
         console.log("followed successfully")
     }catch(err){
@@ -40,7 +58,7 @@ const RightSidebar = ( {user} ) => {
 
   const unfollowHandler = async() => {
     try{
-        await axios.put(`http://localhost:3000/api/user/unfollowUser/${id}`, {userId : selfUser._id});
+        await axios.put(`http://localhost:3000/api/user/unfollowUser/${id}`, {userId : selfUserId});
         setIsFollowed(!isFollowed);
         console.log("unfollowed successfully")
     }catch(err){
@@ -54,30 +72,35 @@ const RightSidebar = ( {user} ) => {
 
   useEffect(()=>{
     const fetchUser = async() => {
+      console.log("id",id)
       if(id){
         try {
           const response = await axios.get(`http://localhost:3000/api/user/getUser/${id}`);
           const nextUser = response.data.data;
 
-          if(selfUser.followings.includes(nextUser._id)){
+          if(selfUser?.followings.includes(nextUser._id)){
             setIsFollowed(true);
-          }else{
+          }else{ 
             setIsFollowed(false);
           }
 
+          
         } catch (err) {
           console.log("Error fetching user data:", err);
-          window.location.href = '/nopage'; // Redirect if error occurs
+          // window.location.href = '/nopage'; // Redirect if error occurs
         } 
       }
     }
     fetchUser();
-    fetchfollowers();
-  },[]);
+    
+  },[selfUser]);
 
+  useEffect(()=>{
+    fetchfollowers();
+  },[user])
+  
   const HomePageComponent = () => {
     const {onlinefriends} = useContext(OnlineFriend);
-    console.log("zzzzzzzzzzzz",onlinefriends);
     return (
       <>
         {/* Birthdays Section */}
@@ -156,7 +179,7 @@ const RightSidebar = ( {user} ) => {
             {
               followers.map((followerId, index) => (
                 <FollowerFriend key={index} id={followerId} />
-              ))
+              )) 
             }
 
           </SimpleGrid>

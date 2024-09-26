@@ -8,20 +8,36 @@ import { useContext } from 'react';
 
 const Feed = ({ userId }) => {
   const [posts, setPosts] = useState([]);
-  const { user } = useContext(UserContext);
+  const selfUserId = useContext(UserContext).userId;
+  const [user, setUser] = useState(null);
+
+
+  useEffect(() => {
+    if (selfUserId) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+          setUser(response.data.data);
+        } catch (err) {
+          console.error("Error fetching user:", err);
+        }
+      };
+      fetchUser();
+    }
+
+  }, [selfUserId]);
 
   useEffect(() => {
     const fetchPosts = async () => {
       const res = userId
         ? await axios.get(`http://localhost:3000/api/posts/getAllUserPost/${userId}`)
-        : await axios.get(`http://localhost:3000/api/posts/getAllPost/${user._id}`);
-      console.log('posts', user);
+        : await axios.get(`http://localhost:3000/api/posts/getAllPost/${selfUserId}`);
+     
       setPosts(res.data.data);
     };
-    fetchPosts();
-  }, []);
-
-  console.log('posts.length', posts);
+    user && fetchPosts();
+  }, [userId, selfUserId, user]);
+ 
 
   return (
     <Box width={800} display="flex" alignItems="center" flexDirection="column" gap={2}>

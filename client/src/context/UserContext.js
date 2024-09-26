@@ -5,9 +5,9 @@ export const UserContext = createContext();
 
 // Create a provider component
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(()=>{
-    const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
+  const [userId, setUserId] = useState(()=>{
+    const storedUserId = localStorage.getItem('userId');
+    return storedUserId ? JSON.parse(storedUserId) : null;
   }); // Initially, no user is logged in
  
     // // Load user from local storage on component mount
@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
     //   }
     // }, []);
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ userId, setUserId }}>
       {children}
     </UserContext.Provider>
   );

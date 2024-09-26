@@ -10,9 +10,25 @@ import axios from 'axios';
 
 const Profile = () => {
   const { id } = useParams(); // Extract id from URL
-  const { user: defaultUser } = useContext(UserContext); // Default user from context
+  const selfUserId = useContext(UserContext).userId;
+  const [defaultUser, setDefaultUser] = useState(null);
   const [user, setUser] = useState(defaultUser); // State to hold user data
   const [loading, setLoading] = useState(false); // State to handle loading status
+
+  useEffect(() => {
+    if (!id && selfUserId) {
+      const fetchdefaultUser = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+          setDefaultUser(response.data.data);
+          setUser(response.data.data);
+        } catch (err) {
+          console.error("Error fetching user:", err);
+        }
+      };
+      fetchdefaultUser();
+    }
+  }, [selfUserId]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,7 +40,7 @@ const Profile = () => {
           console.log('============>',response)
         } catch (err) {
           console.log("Error fetching user data:", err);
-          window.location.href = '/nopage'; // Redirect if error occurs
+          // window.location.href = '/nopage'; // Redirect if error occurs
         } finally {
           setLoading(false);
         }
@@ -34,15 +50,10 @@ const Profile = () => {
     fetchUser(); // Call the function to fetch user data if `id` exists
   }, [id]);
 
-  if (loading) {
-    return <Text>Loading...</Text>; // Render loading state while data is being fetched
-  }
 
-  if (!user) {
-    return <Text>User not found</Text>; // Handle case if user data is not available
-  }
 
   return (
+    user &&
     <Box>
       <Navbar />
       <Flex>

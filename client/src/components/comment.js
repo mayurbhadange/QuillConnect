@@ -6,16 +6,17 @@ import axios from 'axios';
 import { format } from 'timeago.js';
 
 const CommentSection = ({ postId }) => {
-  const { user: currentUser } = useContext(UserContext);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
 
-  
+  const selfUserId = useContext(UserContext).userId;
+  const [currentUser, setCurrentUser] = useState(null);
+
   const fetchComments = async () => {
       try {
           const response = await axios.get(`http://localhost:3000/api/comment/getAllComments/${postId}`);
           setComments(response.data.data );
-          console.log("comments", response.data.data);
+          // console.log("comments", response.data.data);
         } catch (error) {
             console.error('Error fetching comments:', error);
         }
@@ -48,9 +49,21 @@ const handleDeleteComment = async (commentId) => {
 };
 
 useEffect(() => {
+  if (selfUserId) {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+        setCurrentUser(response.data.data);
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
+    };
+    fetchUser();
+  }
   fetchComments();
 }, [postId, handleSubmitComment]);
 return (
+  selfUserId && (
     <Box mt={4}>
       <Divider mb={4} />
       <HStack mt={4} mb={4} >
@@ -98,6 +111,7 @@ return (
       </VStack>
       
     </Box>
+  ) 
   );
 };
 

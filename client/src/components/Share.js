@@ -3,16 +3,33 @@ import { Box, Flex, Input, Avatar, Button, Text, Icon , Image, Spinner} from '@c
 import { FaCamera, FaTag, FaMapMarkerAlt, FaSmile } from 'react-icons/fa';
 import { UserContext } from '../context/UserContext';
 import axios from 'axios';
-
+import { useEffect } from 'react';
 import { storage } from '../firebase'; // Import storage from firebase.js
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-
 const Share = () => {
-  const { user } = useContext(UserContext);
   const [fileData, setFileData] = useState({ caption: '', file: null }); // Initialize fileData as an object
   const fileInputRef = useRef(null); // Create a ref for the file input
   const [loading, setLoading] = useState(false); // Loading state for the share button
+  const selfUserId = useContext(UserContext).userId;
+  const [user, setUser] = useState(null);
+
+  useEffect(() => { 
+    if (selfUserId) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+          setUser(response.data.data);
+        } catch (err) {
+          console.error("Error fetching user:", err);
+        }
+      };
+      fetchUser();
+    }
+  }, []);
+
+
+
   // Handle file change
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -76,7 +93,8 @@ const Share = () => {
   
 
   return (
-    <Box maxWidth="550px" borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} mt={3}>
+    user ? 
+    (<Box maxWidth="550px" borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} mt={3}>
       <Flex alignItems="center" mb={4}>
         <Avatar
           size="md"
@@ -130,7 +148,7 @@ const Share = () => {
           {loading ? <Spinner size="sm" /> : <Text size={'sm'} fontFamily={'monospace'}>Share</Text>}
         </Button>
       </Flex>
-    </Box>
+    </Box>) : <Spinner />
   );
 };
 

@@ -12,13 +12,29 @@ export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [allUsers, setAllUsers] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
-  const { user } = useContext(UserContext);
+  const { userId } = useContext(UserContext);
+  const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const { colorMode, toggleColorMode } = useColorMode();
   const bgColor = useColorModeValue("blue.500", "blue.800");
   const textColor = useColorModeValue("white", "gray.200");
   const inputBg = useColorModeValue("white", "gray.700");
   const searchRef = useRef();
+
+  useEffect(() => { 
+    if (userId) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3000/api/user/getUser/${userId}`);
+          setUser(response.data.data);
+        } catch (err) {
+          console.error("Error fetching user:", err);
+        }
+      };
+      fetchUser();
+    }
+  }, []);
+
 
   const fetchAllUsers = async () => {
     try {

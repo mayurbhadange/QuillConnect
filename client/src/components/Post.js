@@ -30,9 +30,9 @@ const isImage = (mediaUrl) => {
 
 
 const SocialMediaPost = ({ post }) => {
-  const selfUser = useContext(UserContext).user;
+  const selfUserId = useContext(UserContext).userId;
   const [user, setUser] = useState({});
-  const [liked, setLiked] = useState(post.likes.includes(selfUser._id) ? true : false); // Track like status
+  const [liked, setLiked] = useState(post.likes.includes(selfUserId) ? true : false); // Track like status
   const [likeCount, setLikeCount] = useState(post.likes.length); // Initial like count
   const [showComments, setShowComments] = useState(false);
 
@@ -45,8 +45,8 @@ const SocialMediaPost = ({ post }) => {
   const handleLikeClick = async () => {
     try{
 
-      const responce = await axios.put(`http://localhost:3000/api/posts/likeUnlikePost/${post._id}`, {userId: selfUser._id}, {new: true});
-      console.log(post.likes.includes(selfUser._id) ? ('liked successfully', responce.data.data) : ('unliked successfully', responce.data.data));
+      const responce = await axios.put(`http://localhost:3000/api/posts/likeUnlikePost/${post._id}`, {userId: selfUserId}, {new: true});
+      console.log(post.likes.includes(selfUserId) ? ('liked successfully', responce.data.data) : ('unliked successfully', responce.data.data));
       setLiked(!liked);
       setLikeCount( !liked ? likeCount + 1 : likeCount - 1);
       
@@ -77,7 +77,7 @@ const SocialMediaPost = ({ post }) => {
     >
       {/* User Info */}
       <Flex align="center" mb="2">
-        <Link to={selfUser._id === user._id ? `/profile` : `/profile/${user._id}`}>
+        <Link to={selfUserId === user._id ? `/profile` : `/profile/${user._id}`}>
           <Avatar
             src={user.profilePicture || "https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg"} // Default profile image
             alt="Profile"

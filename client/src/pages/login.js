@@ -3,9 +3,9 @@ import { Box, Button, Input, Stack, Text, FormControl, Link, useToast } from '@c
 import axios from 'axios';
 import { UserContext } from '../context/UserContext'; // Import the context
 
+
 const LoginPage = () => {
   const toast = useToast();
-  const { setUser } = useContext(UserContext); // Use context for user
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -19,8 +19,10 @@ const LoginPage = () => {
         headers: { 'Content-Type': 'application/json' },
       });
 
+
       // Save the user data to local storage
-    localStorage.setItem('user', JSON.stringify(response.data.data));
+      console.log("User Data: ", response.data.data);
+    localStorage.setItem('userId', JSON.stringify(response.data.data));
 
       // Show success toast if login is successful
       toast({
@@ -30,9 +32,6 @@ const LoginPage = () => {
         duration: 7000,
         isClosable: true,
       });
-
-      // Set the user in the context
-      setUser(response.data.data); // Use response data from the backend
 
       // Redirect to the homepage after successful login
       window.location.href = '/';

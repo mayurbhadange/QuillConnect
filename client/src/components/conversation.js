@@ -5,11 +5,12 @@ import { Avatar, Box, Text, VStack } from '@chakra-ui/react';
 
 const Conversation = ({conversation, onClick}) => {
 
-    const selfuser = useContext(UserContext).user;
+    const selfuserId = useContext(UserContext).userId;
+        
     const [friend,setFriend] = useState(null);
     const [lastChat,setLastChat] = useState("");
     useEffect(()=>{
-        const friendId = conversation.members.find((m) => m !== selfuser._id);
+        const friendId = conversation.members.find((m) => m !== selfuserId);
         const getUser = async () => {
             try{
                 const res = await axios.get(`http://localhost:3000/api/user/getUser/${friendId}`)
