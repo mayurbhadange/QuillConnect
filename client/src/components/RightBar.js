@@ -131,7 +131,7 @@ const RightSidebar = ( {user} ) => {
 
           {
             onlinefriends?.map((onlineFriend)=>{
-              return <OnlineFriendComponent userId = {onlineFriend.userId} />
+              return <OnlineFriendComponent userId = {onlineFriend} />
             })
           }
           

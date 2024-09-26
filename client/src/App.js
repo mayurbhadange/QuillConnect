@@ -13,10 +13,11 @@ import axios from 'axios';
 
 function App() {
   const selfUserId = useContext(UserContext).userId;
+  console.log("userId", selfUserId)
   const [user, setUser] = useState(null); // State to hold user data
 
   useEffect(() => { 
-    if (selfUserId) {
+    if (selfUserId != null) {
       const fetchUser = async () => {
         try {
           const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
@@ -27,9 +28,9 @@ function App() {
       };
       fetchUser();
     }
-  }, [selfUserId]);
+  }, []);
   return (
-    user &&
+   
     <BrowserRouter>
       <Routes>
         {/* Home page */}

@@ -44,7 +44,7 @@ exports.getConversation = async (req, res) => {
     try{
 
         const userId = req.params.userId;
-        const conversations = await conversation.find({members : {$in : [userId]}});
+        const conversations = await conversation.find({members : {$in : [userId]}}).sort({updatedAt : -1});
         res.status(200).json({
             success: true,
             message: 'All conversations are fetched',

@@ -24,7 +24,7 @@ const user = require('./Routes/user');
 const posts = require('./Routes/posts');
 const conversation = require('./Routes/conversation');
 const message = require('./Routes/message');
- 
+  
 app.use('/api/user',user);
 app.use('/api/comment',comment);  
 app.use('/api/auth', auth);

@@ -12,9 +12,12 @@ import { useEffect } from 'react';
 import { io } from 'socket.io-client';
 
 const Home = () => {
-  const {userId} = useContext(UserContext);
+  const userId = useContext(UserContext).userId;
   const {onlinefriends, setOnlineFriends} = useContext(OnlineFriend);
   const socket = useRef();
+  if(!userId) {
+    window.location.href = "/login";
+  }
 
   useEffect(()=>{
     socket.current = io("ws://localhost:8900");
@@ -28,9 +31,6 @@ const Home = () => {
     })
   },[userId])
   console.log(userId);
-  if(!userId) {
-    window.location.href = "/login";
-  }
   return (
     <Box>
       <Navbar/>

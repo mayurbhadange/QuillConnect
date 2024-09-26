@@ -10,6 +10,7 @@ const OnlineFriendComponent = ({ userId }) => {
   const selfuserId = useContext(UserContext).userId;
 
   useEffect(() => {
+    console.log("onlineFFFF", userId)
     const fetchUser = async () => {
       setIsLoading(true)
       try {

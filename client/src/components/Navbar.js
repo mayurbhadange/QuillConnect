@@ -65,7 +65,7 @@ export default function Navbar() {
   }
 
   const logoutHandler = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("userId");
     window.location.href = "/login";
   }
 

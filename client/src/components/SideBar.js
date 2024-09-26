@@ -60,7 +60,9 @@ const Sidebar = () => {
         }}
       >
         <VStack align="stretch" spacing={3} pt={4}>
-          <MenuItem icon={FiRss}>Feed</MenuItem>
+          <Link href="/" textDecoration={'none'} _hover={{textDecoration: "none"  , zoom : 1.05  }}>
+            <MenuItem icon={FiRss}>Feed</MenuItem>
+          </Link>
           <Link href="/messenger" textDecoration={'none'} _hover={{textDecoration: "none"  , zoom : 1.05  }}>
             <MenuItem icon={FiMessageSquare}>Chats</MenuItem>
           </Link>

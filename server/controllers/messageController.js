@@ -1,5 +1,5 @@
 const message = require('../models/messageSchema');
-
+const Conversation = require('../models/conversationSchema')
 // create message
 exports.createMessage = async (req, res) => {
     try{
@@ -10,6 +10,8 @@ exports.createMessage = async (req, res) => {
             message: 'Message created successfully',
             data : newMessage
         })
+
+        await Conversation.findByIdAndUpdate(req.body.conversationId, { updatedAt: Date.now() });
 
     }catch(error){
         res.status(500).json(error);
