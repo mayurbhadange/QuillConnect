@@ -1,18 +1,18 @@
-## QuillConnect Documentation
-# 1. Introduction
+# QuillConnect Documentation
+## 1. Introduction
 QuillConnect is a social media platform where users can:
 Create accounts.
 Post images, text, or both.
 Follow and interact with other users by liking and commenting on posts.
 Chat with users in real-time through a WebSocket-powered chat system.
 Manage a profile page displaying personal details, posts, and followers/following.
-# 2. Technology Stack
+## 2. Technology Stack
 Front-end: React with Chakra UI for responsive and reusable components.
 Back-end: Node.js with Express for API management.
 Database: MongoDB for storing users, posts, comments, and follower/following relationships.
 Real-time Communication: Socket.IO for live chat and displaying online friends.
 Hosting: Vercel for front-end hosting.
-# 3. Features and Implementation
+## 3. Features and Implementation
 3.1 User Authentication
 Current Setup: Basic login and registration forms. No added security mechanisms such as JWT or OAuth are implemented yet.
 Future Improvement: For enhanced security, consider implementing token-based authentication using JWT or OAuth for session management.
@@ -46,7 +46,7 @@ User Experience: The UI provides a clean and minimal design, ensuring a seamless
 3.7 Hosting
 The front-end of QuillConnect is hosted on Vercel, providing fast and reliable deployment.
 No CI/CD pipelines have been set up, but this could be a future enhancement to streamline deployment processes.
-# 4. Areas for Improvement
+## 4. Areas for Improvement
 Security: Implement token-based authentication like JWT and OAuth.
 Image Handling: Add file size and format restrictions to improve performance.
 Notifications: Implement real-time notifications for likes, comments, and new messages.
