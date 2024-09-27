@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { Avatar, Box, Button, HStack, Input, Text, VStack, List, ListItem, Heading, Icon, Flex, useColorModeValue } from '@chakra-ui/react';
+import { Avatar, Box, HStack, Input, Text, List, ListItem, Icon, Flex, useColorModeValue } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { FaHome } from "react-icons/fa";
 import { UserContext } from '../context/UserContext';
@@ -40,7 +40,7 @@ const Messenger = () => {
 
   const fetchAllUsers = async() => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/user/getAllUsers`)
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getAllUsers`)
       setUsers(res.data.data)
     } catch(error) {
       console.error(error)
@@ -51,7 +51,7 @@ const Messenger = () => {
     try {
       const id1 = u._id;
       const id2 = userId;
-      const res = await axios.get(`http://localhost:3000/api/conversation/getSingleConversation?id1=${id1}&id2=${id2}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/conversation/getSingleConversation?id1=${id1}&id2=${id2}`);
       console.log("res",res.data.data[0]);
       if(res.data.data.length === 0) {
         setIsNewConvo(true);
@@ -75,7 +75,7 @@ const Messenger = () => {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/conversation/getConversation/${userId}`)
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/conversation/getConversation/${userId}`)
         setConversations(res.data.data) 
       } catch(error) {
         console.error(error) 

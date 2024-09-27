@@ -1,8 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Input, Stack, Text, FormControl, Link, useToast } from '@chakra-ui/react';
 import axios from 'axios';
-import { UserContext } from '../context/UserContext'; // Import the context
-
 
 const LoginPage = () => {
   const toast = useToast();
@@ -15,7 +13,7 @@ const LoginPage = () => {
     console.log("User Info: ", { email, password });
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', { email, password }, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, { email, password }, {
         headers: { 'Content-Type': 'application/json' },
       });
 

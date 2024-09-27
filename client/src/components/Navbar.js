@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { Box, Flex, HStack, IconButton, Button, useDisclosure, Heading, Input, Avatar, Text, VStack, Popover, PopoverTrigger, PopoverContent, PopoverBody, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, HStack, IconButton, Button, useDisclosure, Input, Avatar, Text, VStack, Popover, PopoverTrigger, PopoverContent, PopoverBody, useColorModeValue } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, SearchIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { Link, useColorMode } from '@chakra-ui/react';
 import { UserContext } from "../context/UserContext";
@@ -26,7 +26,7 @@ export default function Navbar() {
     if (userId) {
       const fetchUser = async () => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/user/getUser/${userId}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${userId}`);
           setUser(response.data.data);
         } catch (err) {
           console.error("Error fetching user:", err);
@@ -38,7 +38,7 @@ export default function Navbar() {
 
   const fetchAllUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/user/getAllUsers');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getAllUsers`);
       setAllUsers(response.data.data);
     } catch (err) {
       console.error("Error fetching users:", err);

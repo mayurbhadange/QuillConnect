@@ -5,7 +5,6 @@ import {
   Text,
   Button,
   Divider,
-  Avatar,
   Box,
   Icon,
   Link,

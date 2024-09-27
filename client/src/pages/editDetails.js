@@ -112,7 +112,7 @@ const EditDetailsPage = () => {
       const profilePictureURL = await uploadImageToFirebase(profilePicture);
   
       // Update formData with the URLs from Firebase
-      const updatedFormData = {
+      let updatedFormData = {
         ...formData,
         coverPicture: coverPictureURL || formData.coverPicture,  // Retain old URL if no new file is uploaded
         profilePicture: profilePictureURL || formData.profilePicture,  // Same for profilePicture
@@ -126,7 +126,7 @@ const EditDetailsPage = () => {
       }
   
       // Send the updatedFormData to your backend API for saving to MongoDB
-      await axios.put(`http://localhost:3000/api/user/updateUser/${user._id}`, updatedFormData);
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/user/updateUser/${user._id}`, updatedFormData);
   
       // Close loading toast
       toast.close("loadingToast");

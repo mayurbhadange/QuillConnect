@@ -13,7 +13,7 @@ const Conversation = ({conversation, onClick}) => {
         const friendId = conversation.members.find((m) => m !== selfuserId);
         const getUser = async () => {
             try{
-                const res = await axios.get(`http://localhost:3000/api/user/getUser/${friendId}`)
+                const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${friendId}`)
                 console.log("resssssssssssss",res.data.data)
                 setFriend(res.data.data)
             }catch(error){
@@ -23,7 +23,7 @@ const Conversation = ({conversation, onClick}) => {
 
         const getLastChat = async () => {
             try{
-                const res = await axios.get(`http://localhost:3000/api/message/lastMessage/${conversation._id}`)
+                const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/message/lastMessage/${conversation._id}`)
                 console.log("redatamessage", res.data.data[0].message)
                 setLastChat(res.data.data[0].message)
             }catch(error){

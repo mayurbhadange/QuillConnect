@@ -14,7 +14,7 @@ const CommentSection = ({ postId }) => {
 
   const fetchComments = async () => {
       try {
-          const response = await axios.get(`http://localhost:3000/api/comment/getAllComments/${postId}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/comment/getAllComments/${postId}`);
           setComments(response.data.data );
           // console.log("comments", response.data.data);
         } catch (error) {
@@ -26,7 +26,7 @@ const CommentSection = ({ postId }) => {
     if (!newComment.trim()) return;
 
     try {
-      const response = await axios.post(`http://localhost:3000/api/comment/${postId}`, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/comment/${postId}`, {
           userId: currentUser._id,
           name: currentUser.name,
         comment: newComment,
@@ -41,7 +41,7 @@ const CommentSection = ({ postId }) => {
 
 const handleDeleteComment = async (commentId) => {
     try {
-        await axios.delete(`http://localhost:3000/api/comment/deleteComment/${commentId}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/api/comment/deleteComment/${commentId}`);
         setComments(comments.filter(comment => comment._id !== commentId));
     } catch (error) {
         console.error('Error deleting comment:', error);
@@ -52,7 +52,7 @@ useEffect(() => {
   if (selfUserId) {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${selfUserId}`);
         setCurrentUser(response.data.data);
       } catch (err) {
         console.error("Error fetching user:", err);

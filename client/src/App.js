@@ -5,7 +5,7 @@ import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
 import NoPage from './pages/NoPage';
 import EditDetails from './pages/editDetails';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserContext } from './context/UserContext'; // Assuming you're using UserContext for user data
 import Messenger from './pages/messenger'
 import { useEffect, useState } from 'react';
@@ -20,7 +20,8 @@ function App() {
     if (selfUserId != null) {
       const fetchUser = async () => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+          console.log("Process.env",process.env.R)
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${selfUserId}`);
           setUser(response.data.data);
         } catch (err) {
           console.error("Error fetching user:", err);
@@ -28,7 +29,7 @@ function App() {
       };
       fetchUser();
     }
-  }, []);
+  }, [selfUserId]);
   return (
    
     <BrowserRouter>

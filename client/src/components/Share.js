@@ -18,7 +18,7 @@ const Share = () => {
     if (selfUserId) {
       const fetchUser = async () => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${selfUserId}`);
           setUser(response.data.data);
         } catch (err) {
           console.error("Error fetching user:", err);
@@ -77,7 +77,7 @@ const Share = () => {
 
   
       // Now send the post request to your backend
-      const newPost = await axios.post('http://localhost:3000/api/posts', {
+      const newPost = await axios.post(`${process.env.REACT_APP_API_URL}/api/posts`, {
         media: downloadURL ,  // Ensure this is the download URL, not the raw file
         caption: fileData.caption,
         userId: user._id,

@@ -21,7 +21,7 @@ const RightSidebar = ( {user} ) => {
     if (selfUserId) {
       const fetchUser = async () => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${selfUserId}`);
           setUser(response.data.data);
         } catch (err) {
           console.error("Error fetching user:", err);
@@ -35,7 +35,7 @@ const RightSidebar = ( {user} ) => {
     if(user){
       try{
         console.log("xxxxxxxx",user)
-        const res = await axios.get(`http://localhost:3000/api/user/getUser/${user._id}`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${user._id}`);
         console.log("followers", res?.data.data.followers) 
         setFollowers(res?.data.data.followers)
       }catch(error){ 
@@ -48,7 +48,7 @@ const RightSidebar = ( {user} ) => {
   const followHandler = async() => {
     try{
         console.log("followuser")
-        await axios.put(`http://localhost:3000/api/user/followUser/${id}`, {userId : selfUserId});
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/user/followUser/${id}`, {userId : selfUserId});
         setIsFollowed(!isFollowed);
         console.log("followed successfully")
     }catch(err){
@@ -58,7 +58,7 @@ const RightSidebar = ( {user} ) => {
 
   const unfollowHandler = async() => {
     try{
-        await axios.put(`http://localhost:3000/api/user/unfollowUser/${id}`, {userId : selfUserId});
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/user/unfollowUser/${id}`, {userId : selfUserId});
         setIsFollowed(!isFollowed);
         console.log("unfollowed successfully")
     }catch(err){
@@ -75,7 +75,7 @@ const RightSidebar = ( {user} ) => {
       console.log("id",id)
       if(id){
         try {
-          const response = await axios.get(`http://localhost:3000/api/user/getUser/${id}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${id}`);
           const nextUser = response.data.data;
 
           if(selfUser?.followings.includes(nextUser._id)){

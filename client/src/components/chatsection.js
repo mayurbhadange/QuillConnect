@@ -53,7 +53,7 @@ const Chatsection = ({ selectedConversations, newConvo }) => {
         try {
             let conversationId = selectedConversations._id;
             if (newConvo) {
-                const newConversation = await axios.post(`http://localhost:3000/api/conversation/createConversation`, {
+                const newConversation = await axios.post(`${process.env.REACT_APP_API_URL}/api/conversation/createConversation`, {
                     members: [selfUserId, selectedConversations._id]
                 });
                 conversationId = newConversation.data.data._id;
@@ -72,7 +72,7 @@ const Chatsection = ({ selectedConversations, newConvo }) => {
                 message: msg,
                 createdAt: Date.now()
             };
-            await axios.post(`http://localhost:3000/api/message/createMessage`, newMessage);
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/message/createMessage`, newMessage);
             setChats(prev => [...prev, newMessage]);
             setMsg("");
             scrollToBottom();
@@ -92,7 +92,7 @@ const Chatsection = ({ selectedConversations, newConvo }) => {
     
     const fetchMessages = async () => {
         try {
-            const res = await axios.get(`http://localhost:3000/api/message/getAllMessages/${selectedConversations._id}`);
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/message/getAllMessages/${selectedConversations._id}`);
             const sortedMessages = res.data.data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
             setChats(sortedMessages);
             scrollToBottom();
@@ -103,7 +103,7 @@ const Chatsection = ({ selectedConversations, newConvo }) => {
 
     const getUser = async (friendId) => {
         try {
-            const res = await axios.get(`http://localhost:3000/api/user/getUser/${friendId}`);
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${friendId}`);
             setSelectedUser(res.data.data);
         } catch (error) {
             console.error(error);

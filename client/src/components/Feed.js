@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Share from './Share';
-import { Box, Center } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import Post from './Post';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext';
@@ -16,7 +16,7 @@ const Feed = ({ userId }) => {
     if (selfUserId) {
       const fetchUser = async () => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${selfUserId}`);
           setUser(response.data.data);
         } catch (err) {
           console.error("Error fetching user:", err);
@@ -30,8 +30,8 @@ const Feed = ({ userId }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       const res = userId
-        ? await axios.get(`http://localhost:3000/api/posts/getAllUserPost/${userId}`)
-        : await axios.get(`http://localhost:3000/api/posts/getAllPost/${selfUserId}`);
+        ? await axios.get(`${process.env.REACT_APP_API_URL}/api/posts/getAllUserPost/${userId}`)
+        : await axios.get(`${process.env.REACT_APP_API_URL}/api/posts/getAllPost/${selfUserId}`);
      
       setPosts(res.data.data);
     };

@@ -14,7 +14,7 @@ const OnlineFriendComponent = ({ userId }) => {
     const fetchUser = async () => {
       setIsLoading(true)
       try {
-        const res = await axios.get(`http://localhost:3000/api/user/getUser/${userId}`)
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${userId}`)
         setUser(res.data.data)
         setError(null)
       } catch (err) {
@@ -41,7 +41,7 @@ const OnlineFriendComponent = ({ userId }) => {
   }
 
   return (
-    <Flex align="center" mb="3" onClick={()=>selfuserId == userId ? window.location.href = `/profile` : window.location.href = `/profile/${userId}`} _hover={{cursor : "pointer"}}>
+    <Flex align="center" mb="3" onClick={()=>selfuserId === userId ? window.location.href = `/profile` : window.location.href = `/profile/${userId}`} _hover={{cursor : "pointer"}}>
       <Box position="relative">
         <Avatar
           boxSize="40px"

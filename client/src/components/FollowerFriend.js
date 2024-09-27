@@ -13,7 +13,7 @@ const FollowerFriend = ({ id }) => {
         const fetchUser = async () => {
             try {
                 console.log("id", id);
-                const res = await axios.get(`http://localhost:3000/api/user/getUser/${id}`);
+                const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${id}`);
                 setUser(res.data.data);
                 console.log("user", res.data.data);
             } catch (error) {
@@ -33,7 +33,7 @@ const FollowerFriend = ({ id }) => {
                 objectFit="cover"
                 borderRadius="md"
                 _hover={{ cursor: 'pointer' }}  // Hand icon on hover
-                onClick={() => selfUserId == user?._id ? window.location.href = `/profile` : navigate(`/profile/${user._id}`)} // Redirect to user profile on click
+                onClick={() => selfUserId === user?._id ? window.location.href = `/profile` : navigate(`/profile/${user._id}`)} // Redirect to user profile on click
             />
             <Text fontSize={18} mt={1}>{user?.name}</Text>
         </Box>

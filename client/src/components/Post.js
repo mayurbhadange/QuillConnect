@@ -45,7 +45,7 @@ const SocialMediaPost = ({ post }) => {
   const handleLikeClick = async () => {
     try{
 
-      const responce = await axios.put(`http://localhost:3000/api/posts/likeUnlikePost/${post._id}`, {userId: selfUserId}, {new: true});
+      const responce = await axios.put(`${process.env.REACT_APP_API_URL}/api/posts/likeUnlikePost/${post._id}`, {userId: selfUserId}, {new: true});
       console.log(post.likes.includes(selfUserId) ? ('liked successfully', responce.data.data) : ('unliked successfully', responce.data.data));
       setLiked(!liked);
       setLikeCount( !liked ? likeCount + 1 : likeCount - 1);
@@ -59,11 +59,10 @@ const SocialMediaPost = ({ post }) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await axios.get(`http://localhost:3000/api/user/getUser/${post.userId}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${post.userId}`);
       setUser(res.data.data);
     };
     fetchUsers();
-    console.log('post: ', post);
   }, [post.userId]);
 
   return (

@@ -23,7 +23,7 @@ const RegisterPage = () => {
 
     try {
       // Send a POST request to your backend
-      const response = await axios.post('http://localhost:3000/api/auth/register', user); // Update with your actual API endpoint
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, user); // Update with your actual API endpoint
       console.log(response);
 
       // Show success toast if the request is successful
@@ -62,10 +62,10 @@ const RegisterPage = () => {
         {/* Left Section with Branding */}
         <Box>
           <Text fontSize="5xl" fontWeight="bold" color="teal.400">
-            ShareFun
+            QuillConnect
           </Text>
           <Text fontSize="2xl" mt="4" color="gray.300">
-            Connect with friends and the world around you on Lamasocial.
+            Connect with friends and the world around you on QuillConnect.
           </Text>
         </Box>
 

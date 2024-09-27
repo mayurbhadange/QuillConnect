@@ -13,13 +13,12 @@ const Profile = () => {
   const selfUserId = useContext(UserContext).userId;
   const [defaultUser, setDefaultUser] = useState(null);
   const [user, setUser] = useState(defaultUser); // State to hold user data
-  const [loading, setLoading] = useState(false); // State to handle loading status
 
   useEffect(() => {
     if (!id && selfUserId) {
       const fetchdefaultUser = async () => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/user/getUser/${selfUserId}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${selfUserId}`);
           setDefaultUser(response.data.data);
           setUser(response.data.data);
         } catch (err) {
@@ -33,17 +32,14 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       if (id) {
-        setLoading(true);
         try {
-          const response = await axios.get(`http://localhost:3000/api/user/getUser/${id}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${id}`);
           setUser(response.data.data); // Set user data from API response
           console.log('============>',response)
         } catch (err) {
           console.log("Error fetching user data:", err);
           // window.location.href = '/nopage'; // Redirect if error occurs
-        } finally {
-          setLoading(false);
-        }
+        } 
       }
     };
 
