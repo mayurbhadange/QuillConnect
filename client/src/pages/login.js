@@ -18,7 +18,7 @@ const LoginPage = () => {
       });
 
 
-      // Save the user data to local storage
+   
       console.log("User Data: ", response.data.data);
     localStorage.setItem('userId', JSON.stringify(response.data.data));
 
