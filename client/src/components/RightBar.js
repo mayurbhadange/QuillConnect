@@ -146,7 +146,7 @@ const RightSidebar = ( {user} ) => {
         <Stack borderBottom={'white 1px solid'} pb={3}> 
           <HStack>
             <Text fontSize={'2xl'}>User Information: </Text>   
-            {!id ? <EditIcon onClick={()=>{window.location.href = '/editDetails'}}/> :
+            {!id ? <EditIcon _hover={{cursor : "pointer"}} onClick={()=>{window.location.href = '/editDetails'}}/> :
                       (isFollowed ? 
                       <Button colorScheme='teal' variant='outline' onClick={unfollowHandler} >Unfollow</Button> : 
                         <Button colorScheme='teal' variant='outline' onClick={followHandler} >Follow</Button>)

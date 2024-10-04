@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Box,
   VStack,
@@ -23,7 +23,8 @@ import { storage } from "../firebase"; // Adjust the import based on your struct
 import { FaHome } from "react-icons/fa";
 
 const EditDetailsPage = () => {
-    const {user} = useContext(UserContext);
+    const userId = useContext(UserContext).userId;
+    const [user, setUser] = useState(null);
     const CPInputRef = useRef(null);
     const PPInputRef = useRef(null);
     const [CPuploaded, setCPuploaded] = useState(false);
@@ -31,15 +32,7 @@ const EditDetailsPage = () => {
     const [coverPicture, setCoverPicture] = useState(null);
     const [profilePicture, setProfilePicture] = useState(null);
 
-  const [formData, setFormData] = useState({
-    name: user.name,
-    username: user.username,
-    email: user.email,
-    location: user.location,
-    bio: user.bio,
-    profilePicture: user.profilePicture,
-    coverPicture: user.coverPicture,
-  });
+  const [formData, setFormData] = useState({});
 
   const [password, setPassword] = useState('');
   const toast = useToast();
@@ -158,10 +151,35 @@ const EditDetailsPage = () => {
   
     }
   };
+
+  useEffect(()=>{
+    const fetchUser = async ()=>{
+      try{
+
+        const currUser = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${userId}`);
+        setUser(currUser.data.data);
+        setFormData({
+          name: currUser.data.data?.name,
+          username: currUser.data.data?.username,
+          email: currUser.data.data?.email,
+          location: currUser.data.data?.location,
+          bio: currUser.data.data?.bio,
+          profilePicture: currUser.data.data?.profilePicture,
+          coverPicture: currUser.data.data?.coverPicture,
+        })
+        console.log(currUser.data.data)
+
+      }catch(err){
+        console.log(err)
+      }
+    }
+    fetchUser();
+  }, [userId])
   
 
 
   return (
+    user &&
     <Box p={5}>
     <Icon as={FaHome} boxSize={6} size={5} color="white" onClick={()=>window.location.href='/'} />
     <Container maxW="container.md" >

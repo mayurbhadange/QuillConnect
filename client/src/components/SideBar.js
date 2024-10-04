@@ -67,7 +67,9 @@ const Sidebar = () => {
           </Link>
           <MenuItem icon={FiVideo}>Videos</MenuItem>
           <MenuItem icon={FiUsers}>Groups</MenuItem>
-          <MenuItem icon={FiBookmark}>Bookmarks</MenuItem>
+          <Link href="/bookmarks" textDecoration={'none'} _hover={{textDecoration: "none"  , zoom : 1.05  }}>
+            <MenuItem icon={FiBookmark}>Bookmarks</MenuItem>
+          </Link>
           <MenuItem icon={FiHelpCircle}>Questions</MenuItem>
           <MenuItem icon={FiBriefcase}>Jobs</MenuItem>
           <MenuItem icon={FiCalendar}>Events</MenuItem>

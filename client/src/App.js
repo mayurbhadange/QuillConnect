@@ -10,6 +10,7 @@ import { UserContext } from './context/UserContext'; // Assuming you're using Us
 import Messenger from './pages/messenger'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import BookmarkPage from './pages/bookmark';
 
 function App() {
   const selfUserId = useContext(UserContext).userId;
@@ -53,6 +54,8 @@ function App() {
         <Route path='/editDetails' element={<EditDetails/>} />
 
         <Route path='/messenger' element={ <Messenger/>} />
+
+        <Route path='/bookmarks' element={ <BookmarkPage/>} />
         
         {/* No match route */}
         <Route path="*" element={<NoPage />} />

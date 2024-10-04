@@ -1,62 +1,70 @@
-import { useState, useEffect, useContext } from 'react';
-import { Box, Image, Text, Avatar, Flex, Icon } from '@chakra-ui/react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Box, Image, Text, Avatar, Flex, Icon, HStack, MenuItem, MenuList, Menu, MenuButton, IconButton } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
-import { AiOutlineHeart, AiFillHeart, AiOutlineMessage } from 'react-icons/ai';
+import { AiOutlineHeart, AiFillHeart, AiOutlineMessage, AiOutlineMore } from 'react-icons/ai';
 import axios from 'axios';
 import { format } from 'timeago.js';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
-import CommentSection from '../components/comment';  // Import the new CommentSection component
+import CommentSection from '../components/comment';
 
-// Keyframes for the like animation
 const bounce = keyframes`
   0% { transform: scale(1); }
   50% { transform: scale(1.2); }
   100% { transform: scale(1); }
 `;
 
-// Function to check if media is image or video by looking at the file extension before the query parameters
 const isImage = (mediaUrl) => {
-  // Extract the part of the URL before the query parameters (anything before "?")
   const cleanUrl = mediaUrl.split('?')[0];
-  
-  // List of common image file extensions
   const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
-  
-  // Extract the file extension (last part after the ".")
   const extension = cleanUrl.split('.').pop().toLowerCase();
-  
   return imageExtensions.includes(extension);
 };
-
 
 const SocialMediaPost = ({ post }) => {
   const selfUserId = useContext(UserContext).userId;
   const [user, setUser] = useState({});
-  const [liked, setLiked] = useState(post.likes.includes(selfUserId) ? true : false); // Track like status
-  const [likeCount, setLikeCount] = useState(post.likes.length); // Initial like count
+  const [liked, setLiked] = useState(post.likes.includes(selfUserId));
+  const [likeCount, setLikeCount] = useState(post.likes.length);
   const [showComments, setShowComments] = useState(false);
-
 
   const toggleComments = () => {
     setShowComments(!showComments);
   };
   
-  // Function to handle like button click
   const handleLikeClick = async () => {
-    try{
-
-      const responce = await axios.put(`${process.env.REACT_APP_API_URL}/api/posts/likeUnlikePost/${post._id}`, {userId: selfUserId}, {new: true});
-      console.log(post.likes.includes(selfUserId) ? ('liked successfully', responce.data.data) : ('unliked successfully', responce.data.data));
+    try {
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/posts/likeUnlikePost/${post._id}`, {userId: selfUserId}, {new: true});
       setLiked(!liked);
-      setLikeCount( !liked ? likeCount + 1 : likeCount - 1);
-      
-      console.log('like count', likeCount);
-
-    }catch(error){
-      console.log("error while commenting", error)
+      setLikeCount(!liked ? likeCount + 1 : likeCount - 1);
+    } catch(error) {
+      console.log("Error while liking/unliking", error);
     }
   };
+
+  const handleBookmark = async () => {
+    // Implement bookmark functionality
+    try{
+      const newPost = await axios.post(`${process.env.REACT_APP_API_URL}/api/posts/addBookmark/${post._id}`, {userId : selfUserId})
+      console.log(newPost)
+    }catch(err){
+      console.log(err)
+    }   
+    console.log("Bookmark clicked");
+  };
+
+  const handleDelete = async () => {
+    // Implement delete functionality
+    try{
+      const newPost = await axios.delete(`${process.env.REACT_APP_API_URL}/api/posts/deletePost/${post._id}`)
+      console.log(newPost)
+      window.location.reload();
+    }catch(err){
+      console.log(err)
+    }
+    console.log("Delete clicked");
+  };
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -75,41 +83,64 @@ const SocialMediaPost = ({ post }) => {
       boxShadow="sm"
       p="4"
     >
-      {/* User Info */}
-      <Flex align="center" mb="2">
-        <Link to={selfUserId === user._id ? `/profile` : `/profile/${user._id}`}>
-          <Avatar
-            src={user.profilePicture || "https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg"} // Default profile image
-            alt="Profile"
-            size="md"
-          />
-        </Link>
-        <Box ml="3">
-          <Text fontWeight="bold">{user.name}</Text>
-          <Text fontSize="sm" color="gray.500">
-            {format(post.createdAt)}
-          </Text>
-        </Box>
-      </Flex>
+      <HStack justify="space-between">
+        <Flex align="center">
+          <Link to={selfUserId === user._id ? `/profile` : `/profile/${user._id}`}>
+            <Avatar
+              src={user.profilePicture || "https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg"}
+              alt="Profile"
+              size="md"
+            />
+          </Link>
+          <Box ml="3">
+            <Text fontWeight="bold">{user.name}</Text>
+            <Text fontSize="sm" color="gray.500">
+              {format(post.createdAt)}
+            </Text>
+          </Box>
+        </Flex>
 
-      {/* Post Media */}
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="Options"
+            icon={<AiOutlineMore />}
+            variant="ghost"
+          />
+          <MenuList minWidth="120px">
+            <MenuItem onClick={handleBookmark}>
+              Bookmark
+            </MenuItem>
+           { post.userId === selfUserId && <MenuItem 
+              onClick={handleDelete}
+              _hover={{ bg: "red.100" }}
+              color="red.600"
+              fontWeight={'bold'}
+            >
+              Delete
+            </MenuItem>}
+          </MenuList>
+        </Menu>
+      </HStack>
+
       {post?.media && (
         <Box
           display="flex"
           flexDirection="column"
           alignItems="center"
-          maxW="100%" // Full width of the container
+          maxW="100%"
           overflow="hidden"
+          mt="4"
         >
           {isImage(post.media) ? (
             <Image
               src={post.media}
               borderRadius="md"
               mb="4"
-              objectFit="cover" // Crop to fit
-              width="100%" // Responsive width
-              maxH="400px" // Set max height
-              height="auto" // Maintain aspect ratio
+              objectFit="cover"
+              width="100%"
+              maxH="400px"
+              height="auto"
             />
           ) : (
             <video
@@ -117,8 +148,8 @@ const SocialMediaPost = ({ post }) => {
               controls
               style={{
                 width: '100%',
-                maxHeight: '400px', // Set max height for video
-                objectFit: 'cover', // Crop to fit
+                maxHeight: '400px',
+                objectFit: 'cover',
                 borderRadius: 'md',
               }}
             />
@@ -126,13 +157,11 @@ const SocialMediaPost = ({ post }) => {
         </Box>
       )}
 
-      {/* Post Caption */}
       <Text fontSize="lg" mb="4">
         {post?.caption}
       </Text>
 
-       {/* Updated Like and Comment Section */}
-       <Flex justify="space-between" align="center">
+      <Flex justify="space-between" align="center">
         <Flex align="center">
           <Icon
             as={liked ? AiFillHeart : AiOutlineHeart}
@@ -155,7 +184,6 @@ const SocialMediaPost = ({ post }) => {
         </Flex>
       </Flex>
 
-      {/* Comment Section */}
       {showComments && <CommentSection postId={post._id} />}
     </Box>
   );

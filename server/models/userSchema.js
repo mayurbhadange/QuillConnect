@@ -33,6 +33,12 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
     }],
+    bookmarks : [
+        {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
+        }
+    ],
     profilePicture:{
         type: String,
         default: "https://firebasestorage.googleapis.com/v0/b/sharefun-dc053.appspot.com/o/media%2Fimages%2FdefaultProfilePicture.jpg?alt=media&token=12594fa8-81ef-4aa9-9263-24d9ed6cf36f"

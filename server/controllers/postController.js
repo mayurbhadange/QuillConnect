@@ -60,6 +60,22 @@ exports.getPost = async (req, res) => {
     }
 }
 
+exports.addBookmark = async (req, res) => {
+    try{
+        const id = req.params.id;
+        const userId = req.body.userId;
+        const post = await user.findByIdAndUpdate(userId,{ $push : {bookmarks : id}});
+        res.status(200).json({
+            success: true,
+            message: 'single bookmark added successfully',
+            data: post
+        })
+    }catch(err){
+        res.status(500).json(err);
+    }
+}
+
+
 exports.deletePost = async (req, res) => {
     try{
 
