@@ -53,7 +53,7 @@ const LoginPage = () => {
     <Box display="flex" alignItems="center" justifyContent="center" height="100vh" bg="gray.900">
       <Stack direction="row" spacing={10} align="center">
         <Box>
-          <Text fontSize="5xl" fontWeight="bold" color="teal.400">ShareFun</Text>
+          <Text fontSize="5xl" fontWeight="bold" color="teal.400">QuillConnect</Text>
           <Text fontSize="2xl" mt="4" color="gray.300">Connect with friends and the world around you on ShareFun.</Text>
         </Box>
 
