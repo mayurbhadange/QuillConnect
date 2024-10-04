@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { Box, Flex, HStack, IconButton, Button, useDisclosure, Input, Avatar, Text, VStack, Popover, PopoverTrigger, PopoverContent, PopoverBody, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, HStack, IconButton, Button, useDisclosure, Input, Avatar, Text, VStack, Popover, PopoverTrigger, PopoverContent, PopoverBody, useColorModeValue, Image } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, SearchIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { Link, useColorMode } from '@chakra-ui/react';
 import { UserContext } from "../context/UserContext";
@@ -22,6 +22,7 @@ export default function Navbar() {
   const inputBg = useColorModeValue("white", "gray.700");
   const searchRef = useRef();
 
+  // ... (keep the existing useEffect and functions)
   useEffect(() => { 
     if (userId) {
       const fetchUser = async () => {
@@ -72,7 +73,6 @@ export default function Navbar() {
   useEffect(() => {
     fetchAllUsers();
   }, []);
-
   return (
     <Box bg={bgColor} px={4} position="sticky" top="0" zIndex="999" boxShadow="md">
       <Flex h={16} alignItems="center" justifyContent="space-between">
@@ -87,16 +87,23 @@ export default function Navbar() {
         />
         <Link href="/" _hover={{ textDecoration: 'none' }}>
           <Flex alignItems="center">
+            <Image
+              src="https://firebasestorage.googleapis.com/v0/b/sharefun-dc053.appspot.com/o/media%2Fimages%2Ffavicon2.png?alt=media&token=5cb32fc8-bd6d-4c81-8d75-ff5b642c0634"
+              alt="Quill Logo"
+              boxSize={{ base: "30px", md: "40px" }}
+              mr={2}
+            />
             <AnimatedText
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               color={textColor}
               fontWeight="extrabold"
-              fontSize={{ base: "xl", md: "2xl" }}
+              fontSize={{ base: "lg", md: "2xl" }}
               fontStyle="italic"
               textShadow="2px 2px 4px rgba(0,0,0,0.3)"
               letterSpacing="wider"
+              display={{ base: "none", sm: "block" }}
             >
               Quill
             </AnimatedText>
@@ -106,10 +113,11 @@ export default function Navbar() {
               transition={{ duration: 0.5, delay: 0.2 }}
               color={useColorModeValue("yellow.300", "yellow.200")}
               fontWeight="extrabold"
-              fontSize={{ base: "xl", md: "2xl" }}
+              fontSize={{ base: "lg", md: "2xl" }}
               fontStyle="italic"
               textShadow="2px 2px 4px rgba(0,0,0,0.3)"
               letterSpacing="wider"
+              display={{ base: "none", sm: "block" }}
             >
               Connect
             </AnimatedText>
@@ -119,9 +127,9 @@ export default function Navbar() {
         <HStack spacing={8} alignItems="center" flex={1} justifyContent="center">
           <Popover placement="bottom" isOpen={suggestions.length > 0}>
             <PopoverTrigger>
-              <Box position="relative" width={{ base: "full", md: "500px" }}>
+              <Box position="relative" width={{ base: "full", md: "400px", lg: "500px" }}>
                 <Input
-                  placeholder='Search for friend, post or video'
+                  placeholder='Search'
                   value={searchTerm}
                   onChange={updateSuggestions}
                   bg={inputBg}
@@ -163,13 +171,14 @@ export default function Navbar() {
             variant="ghost"
             color={textColor}
             aria-label="Toggle color mode"
+            display={{ base: "none", md: "flex" }}
           />
           {user && (
             <Link href="/profile">
               <Avatar size="sm" name={user.name} src={user.profilePicture} />
             </Link>
           )}
-          <Button onClick={logoutHandler} colorScheme="red" size="sm">
+          <Button onClick={logoutHandler} colorScheme="red" size="sm" display={{ base: "none", md: "flex" }}>
             Logout
           </Button>
         </HStack>
@@ -179,8 +188,11 @@ export default function Navbar() {
         <Box pb={4} display={{ md: "none" }}>
           <VStack as="nav" spacing={4}>
             <Button w="full" variant="ghost" color={textColor}>Home</Button>
-            <Button w="full" variant="ghost" color={textColor}>About</Button>
-            <Button w="full" variant="ghost" color={textColor}>Contact</Button>
+            <Button w="full" variant="ghost" color={textColor}>Profile</Button>
+            <Button w="full" variant="ghost" color={textColor} onClick={toggleColorMode}>
+              {colorMode === 'light' ? 'Dark Mode' : 'Light Mode'}
+            </Button>
+            <Button w="full" colorScheme="red" onClick={logoutHandler}>Logout</Button>
           </VStack>
         </Box>
       )}

@@ -20,7 +20,7 @@ dbConnect();
  
 app.get('/', (req, res) => {
     res.send('Server is running!');
-});
+}); 
 
 
 const auth = require('./Routes/auth');
