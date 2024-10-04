@@ -18,6 +18,11 @@ app.listen(PORT,()=>{
 const {dbConnect} = require('./config/database')
 dbConnect();
 
+app.get('/', (req, res) => {
+    res.send('Server is running!');
+});
+
+
 const auth = require('./Routes/auth');
 const comment = require('./Routes/comment')
 const user = require('./Routes/user');
