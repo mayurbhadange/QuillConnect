@@ -17,7 +17,7 @@ app.listen(PORT,()=>{
 //connecting database
 const {dbConnect} = require('./config/database')
 dbConnect();
-
+ 
 app.get('/', (req, res) => {
     res.send('Server is running!');
 });
