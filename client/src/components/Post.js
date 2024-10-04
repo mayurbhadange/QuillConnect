@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import { Box, Image, Text, Avatar, Flex, Icon, keyframes } from '@chakra-ui/react';
+import { Box, Image, Text, Avatar, Flex, Icon } from '@chakra-ui/react';
+import { keyframes } from '@emotion/react';
 import { AiOutlineHeart, AiFillHeart, AiOutlineMessage } from 'react-icons/ai';
 import axios from 'axios';
 import { format } from 'timeago.js';

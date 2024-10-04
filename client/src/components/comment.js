@@ -88,15 +88,15 @@ return (
               />
               <Box>
                 <HStack>
-                  <Text fontWeight="bold">{comment.name}</Text>
+                  <Text fontWeight="bold">{comment?.name}</Text>
                   <Text fontSize="xs" color="gray.500">
-                    {format(comment.createdAt)}
+                    {format(comment?.createdAt)}
                   </Text>
                 </HStack>
-                <Text fontSize="sm">{comment.comment}</Text>
+                <Text fontSize="sm">{comment?.comment}</Text>
               </Box>
             </HStack>
-            {currentUser._id === comment.userId && (
+            {currentUser && currentUser._id === comment.userId && (
               <IconButton
                 aria-label="Delete comment"
                 icon={<DeleteIcon />}
