@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Share from './Share';
-import { Box } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 import Post from './Post';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext';
@@ -44,7 +44,7 @@ const Feed = ({ userId }) => {
       <Share />
 
       {posts === undefined || posts.length === 0 ? (
-        <Box>No Post Yet !!!</Box>
+        <Spinner/>
       ) : (
         posts.map((post) => <Post key={post._id} post={post} />)
       )}

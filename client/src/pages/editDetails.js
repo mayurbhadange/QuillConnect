@@ -21,6 +21,7 @@ import axios from 'axios';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase"; // Adjust the import based on your structure
 import { FaHome } from "react-icons/fa";
+import Navbar from '../components/Navbar';
 
 const EditDetailsPage = () => {
     const userId = useContext(UserContext).userId;
@@ -180,8 +181,9 @@ const EditDetailsPage = () => {
 
   return (
     user &&
+    <>
+      <Navbar/>
     <Box p={5}>
-    <Icon as={FaHome} boxSize={6} size={5} color="white" onClick={()=>window.location.href='/'} />
     <Container maxW="container.md" >
       <VStack spacing={8} align="stretch">
         <Box position="relative" h="200px" overflow="hidden" borderRadius="lg">
@@ -274,6 +276,7 @@ const EditDetailsPage = () => {
       </VStack>
     </Container>
             </Box>
+    </>
   );
 };
 
