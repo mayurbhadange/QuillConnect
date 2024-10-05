@@ -57,9 +57,10 @@ const Chatsection = ({ selectedConversations, newConvo }) => {
                     members: [selfUserId, selectedConversations._id]
                 });
                 conversationId = newConversation.data.data._id;
+                
             }
 
-            const receiverId = selectedConversations.members.find(userId => selfUserId !== userId);
+            const receiverId = newConvo ? selectedConversations._id : selectedConversations.members.find(userId => selfUserId !== userId);
             socket.current.emit("sendMessage", {
                 senderId: selfUserId,
                 receiverId: receiverId,
@@ -75,7 +76,9 @@ const Chatsection = ({ selectedConversations, newConvo }) => {
             await axios.post(`${process.env.REACT_APP_API_URL}/api/message/createMessage`, newMessage);
             setChats(prev => [...prev, newMessage]);
             setMsg("");
+            // window.location.reload();
             scrollToBottom();
+
         } catch (err) {
             console.log(err);
         }
