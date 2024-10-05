@@ -17,12 +17,16 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const { colorMode, toggleColorMode } = useColorMode();
-  const bgColor = useColorModeValue("blue.500", "blue.800");
-  const textColor = useColorModeValue("white", "gray.200");
-  const inputBg = useColorModeValue("white", "gray.700");
   const searchRef = useRef();
 
-  // ... (keep the existing useEffect and functions)
+  // Constant colors for navbar
+  const navbarBgColor = "blue.900";
+  const navbarTextColor = "white";
+
+  // Color mode dependent values for search bar
+  const inputBg = useColorModeValue("white", "gray.700");
+  const inputTextColor = useColorModeValue("gray.800", "white");
+
   useEffect(() => { 
     if (userId) {
       const fetchUser = async () => {
@@ -73,8 +77,16 @@ export default function Navbar() {
   useEffect(() => {
     fetchAllUsers();
   }, []);
+
+  useEffect(() => {
+    // Set the initial color mode to dark
+    if (colorMode === 'light') {
+      toggleColorMode();
+    }
+  }, []);
+
   return (
-    <Box bg={bgColor} px={4} position="sticky" top="0" zIndex="999" boxShadow="md">
+    <Box bg={navbarBgColor} px={4} position="sticky" top="0" zIndex="999" boxShadow="md">
       <Flex h={16} alignItems="center" justifyContent="space-between">
         <IconButton
           size="md"
@@ -83,7 +95,7 @@ export default function Navbar() {
           display={{ base: "flex", md: "none" }}
           onClick={isOpen ? onClose : onOpen}
           variant="ghost"
-          color={textColor}
+          color={navbarTextColor}
         />
         <Link href="/" _hover={{ textDecoration: 'none' }}>
           <Flex alignItems="center">
@@ -97,7 +109,7 @@ export default function Navbar() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              color={textColor}
+              color={navbarTextColor}
               fontWeight="extrabold"
               fontSize={{ base: "lg", md: "2xl" }}
               fontStyle="italic"
@@ -111,7 +123,7 @@ export default function Navbar() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              color={useColorModeValue("yellow.300", "yellow.200")}
+              color="yellow.300"
               fontWeight="extrabold"
               fontSize={{ base: "lg", md: "2xl" }}
               fontStyle="italic"
@@ -133,6 +145,7 @@ export default function Navbar() {
                   value={searchTerm}
                   onChange={updateSuggestions}
                   bg={inputBg}
+                  color={inputTextColor}
                   borderRadius="full"
                   pl={10}
                   ref={searchRef}
@@ -166,10 +179,10 @@ export default function Navbar() {
 
         <HStack spacing={4}>
           <IconButton
-            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+            icon={colorMode === 'dark' ? <SunIcon /> : <MoonIcon />}
             onClick={toggleColorMode}
             variant="ghost"
-            color={textColor}
+            color={navbarTextColor}
             aria-label="Toggle color mode"
             display={{ base: "none", md: "flex" }}
           />
@@ -187,10 +200,10 @@ export default function Navbar() {
       {isOpen && (
         <Box pb={4} display={{ md: "none" }}>
           <VStack as="nav" spacing={4}>
-            <Button w="full" variant="ghost" color={textColor}>Home</Button>
-            <Button w="full" variant="ghost" color={textColor}>Profile</Button>
-            <Button w="full" variant="ghost" color={textColor} onClick={toggleColorMode}>
-              {colorMode === 'light' ? 'Dark Mode' : 'Light Mode'}
+            <Button w="full" variant="ghost" color={navbarTextColor}>Home</Button>
+            <Button w="full" variant="ghost" color={navbarTextColor}>Profile</Button>
+            <Button w="full" variant="ghost" color={navbarTextColor} onClick={toggleColorMode}>
+              {colorMode === 'dark' ? 'Light Mode' : 'Dark Mode'}
             </Button>
             <Button w="full" colorScheme="red" onClick={logoutHandler}>Logout</Button>
           </VStack>
