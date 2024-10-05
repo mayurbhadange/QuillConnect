@@ -32,7 +32,7 @@ const Feed = ({ userId }) => {
       const res = userId
         ? await axios.get(`${process.env.REACT_APP_API_URL}/api/posts/getAllUserPost/${userId}`)
         : await axios.get(`${process.env.REACT_APP_API_URL}/api/posts/getAllPost/${selfUserId}`);
-     
+     console.log(res.data.data);
       setPosts(res.data.data);
     };
     user && fetchPosts();

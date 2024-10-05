@@ -75,12 +75,37 @@ exports.addBookmark = async (req, res) => {
     }
 }
 
+exports.deleteBookmark = async (req, res) => {
+    try{
+        const id = req.params.id;
+        const userId = req.body.userId;
+        const post = await user.findByIdAndUpdate(userId,{ $pull : {bookmarks : id}});
+        res.status(200).json({
+            success: true,
+            message: 'single bookmark added successfully',
+            data: post
+        })
+    }catch(err){
+        res.status(500).json(err);
+    }
+}
+
 
 exports.deletePost = async (req, res) => {
     try{
 
         const {id} = req.params;
+        const userId = req.body.userId;
+        console.log("userId",userId);
+
         const post = await Post.findByIdAndDelete(id);
+        console.log("post",post);
+        const postArray = await user.findByIdAndUpdate(userId,{ $pull : {posts : id}});
+        console.log("postArray",postArray);
+        if(postArray.bookmarks.includes(id)){
+            const bookmarkpost = await user.findByIdAndUpdate(userId,{ $pull : {bookmarks : id}});
+            console.log("bookmarkpost",bookmarkpost);
+        }
         res.status(200).json({
             success: true,
             message: 'Post deleted successfully',

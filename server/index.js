@@ -31,7 +31,7 @@ const conversation = require('./Routes/conversation');
 const message = require('./Routes/message');
   
 app.use('/api/user',user);
-app.use('/api/comment',comment);  
+app.use('/api/comment',comment);   
 app.use('/api/auth', auth);
 app.use('/api/posts', posts); 
 app.use('/api/conversation', conversation);

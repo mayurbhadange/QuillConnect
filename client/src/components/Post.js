@@ -23,6 +23,7 @@ const isImage = (mediaUrl) => {
 
 const SocialMediaPost = ({ post }) => {
   const selfUserId = useContext(UserContext).userId;
+  const [selfUser, setSelfUser] = useState({});
   const [user, setUser] = useState({});
   const [liked, setLiked] = useState(post.likes.includes(selfUserId));
   const [likeCount, setLikeCount] = useState(post.likes.length);
@@ -42,7 +43,7 @@ const SocialMediaPost = ({ post }) => {
     }
   };
 
-  const handleBookmark = async () => {
+  const handleAddBookmark = async () => {
     // Implement bookmark functionality
     try{
       const newPost = await axios.post(`${process.env.REACT_APP_API_URL}/api/posts/addBookmark/${post._id}`, {userId : selfUserId})
@@ -52,18 +53,38 @@ const SocialMediaPost = ({ post }) => {
     }   
     console.log("Bookmark clicked");
   };
+  const handleDeleteBookmark = async () => {
+    // Implement bookmark functionality
+    try{
+      const newPost = await axios.post(`${process.env.REACT_APP_API_URL}/api/posts/deleteBookmark/${post._id}`, {userId : selfUserId})
+      console.log(newPost)
+    }catch(err){
+      console.log(err)
+    }   
+    console.log("Bookmark deleted");
+  };
 
   const handleDelete = async () => {
     // Implement delete functionality
-    try{
-      const newPost = await axios.delete(`${process.env.REACT_APP_API_URL}/api/posts/deletePost/${post._id}`)
-      console.log(newPost)
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/posts/deletePost/${post._id}`, {
+        data: { userId: selfUserId }
+      });
+      console.log(response);
       window.location.reload();
-    }catch(err){
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
     console.log("Delete clicked");
   };
+
+  useEffect(()=>{
+    const fetchSelfUser = async () => {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${selfUserId}`);
+      setSelfUser(res.data.data);
+    };
+    fetchSelfUser();
+  }, [selfUserId]);
 
 
   useEffect(() => {
@@ -108,9 +129,12 @@ const SocialMediaPost = ({ post }) => {
             variant="ghost"
           />
           <MenuList minWidth="120px">
-            <MenuItem onClick={handleBookmark}>
+            { selfUser?.bookmarks?.includes(post._id) ? <MenuItem onClick={handleDeleteBookmark}>
+            Remove Bookmark
+            </MenuItem> :
+            <MenuItem onClick={handleAddBookmark}>
               Bookmark
-            </MenuItem>
+            </MenuItem>}
            { post.userId === selfUserId && <MenuItem 
               onClick={handleDelete}
               _hover={{ bg: "red.100" }}
