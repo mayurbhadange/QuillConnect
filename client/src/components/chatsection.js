@@ -46,43 +46,51 @@ const Chatsection = ({ selectedConversations, newConvo }) => {
         }
         scrollToBottom();
     }, [selectedConversations, newConvo, selfUserId]);
+    
+    const [isNewConvo, setIsNewConvo] = useState(newConvo);
+    const [conversationId , setconversationId]= useState(isNewConvo ? null : selectedConversations._id);
+const megSender = async () => {
+    if (!msg.trim()) return;
 
-    const megSender = async () => {
-        if (!msg.trim()) return;
+    try {
+        let conversationIdToUse = conversationId; // default to current conversation ID
+        const receiverId = newConvo ? selectedConversations._id : selectedConversations.members.find(userId => selfUserId !== userId);
 
-        try {
-            let conversationId = selectedConversations._id;
-            if (newConvo) {
-                const newConversation = await axios.post(`${process.env.REACT_APP_API_URL}/api/conversation/createConversation`, {
-                    members: [selfUserId, selectedConversations._id]
-                });
-                conversationId = newConversation.data.data._id;
-                
-            }
-
-            const receiverId = newConvo ? selectedConversations._id : selectedConversations.members.find(userId => selfUserId !== userId);
-            socket.current.emit("sendMessage", {
-                senderId: selfUserId,
-                receiverId: receiverId,
-                text: msg
+        // Create a new conversation if needed
+        if (newConvo && isNewConvo) {
+            const newConversation = await axios.post(`${process.env.REACT_APP_API_URL}/api/conversation/createConversation`, {
+                members: [selfUserId, selectedConversations._id]
             });
-
-            const newMessage = {
-                conversationId: conversationId,
-                senderId: selfUserId,
-                message: msg,
-                createdAt: Date.now()
-            };
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/message/createMessage`, newMessage);
-            setChats(prev => [...prev, newMessage]);
-            setMsg("");
-            // window.location.reload();
-            scrollToBottom();
-
-        } catch (err) {
-            console.log(err);
+            console.log("new convo",newConversation.data.data);
+            conversationIdToUse = newConversation.data.data._id; // update with the new conversation ID
+            setconversationId(conversationIdToUse); // set the conversation ID state
+            setIsNewConvo(false); // mark the conversation as established
         }
-    };
+
+        // Send the message to the socket and backend
+        socket.current.emit("sendMessage", {
+            senderId: selfUserId,
+            receiverId: receiverId,
+            text: msg
+        });
+
+        const newMessage = {
+            conversationId: conversationIdToUse, // use the updated or existing conversation ID
+            senderId: selfUserId,
+            message: msg,
+            createdAt: Date.now()
+        };
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/message/createMessage`, newMessage);
+
+        setChats(prev => [...prev, newMessage]); // Add the new message to the chat
+        setMsg(""); // Clear the input field
+        scrollToBottom(); // Scroll to the latest message
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 
     const getTime = (createdAt) => {
         const dateObj = new Date(createdAt);

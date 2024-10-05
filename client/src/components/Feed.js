@@ -44,7 +44,11 @@ const Feed = ({ userId }) => {
       <Share />
 
       {posts === undefined || posts.length === 0 ? (
-        <Spinner/>
+        <>
+          <Box>No posts yet!</Box>
+          <Box>Follow others to see the posts</Box>
+        </>
+       
       ) : (
         posts.map((post) => <Post key={post._id} post={post} />)
       )}
