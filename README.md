@@ -47,7 +47,6 @@ User Experience: The UI provides a clean and minimal design, ensuring a seamless
 The front-end of QuillConnect is hosted on Vercel, providing fast and reliable deployment.
 No CI/CD pipelines have been set up, but this could be a future enhancement to streamline deployment processes.
 ## 4. Areas for Improvement
-### Security: Implement token-based authentication like JWT and OAuth.
 ### Image Handling: Add file size and format restrictions to improve performance.
 ### Notifications: Implement real-time notifications for likes, comments, and new messages.
 ### Scalability: Introduce caching mechanisms and consider load balancing strategies as the platform grows.
